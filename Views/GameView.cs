@@ -9,31 +9,20 @@ namespace SumoMVC.Views
 {
     public class GameView : IGameView
     {
-        public void drawGame()
+
+
+        public Player createPlayer(int playerId)
         {
-            throw new NotImplementedException();
+            Console.Clear();
+            Console.WriteLine("Wprowadź nazwę " + playerId + " gracza: ");
+            string nazwa = Console.ReadLine();
+            Player player = new Player(nazwa,playerId);
+            if (playerId == 1) player.shape = '+';
+            else player.shape = 'o';
+            return player;
         }
 
-        public void saveScore()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void createPlayer(int playerId)
-        {
-            ///////////////????????? gdzie to do cholery ma kurwa byc
-        }
-
-        public void setupGame(IGameModel gameModel)
-        {
 
 
-
-        }
-
-        public void startGame()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -14,7 +14,8 @@ namespace SumoMVC.Controllers
         private IMenuModel menuModel;
         private IMenuView menuView;
 
-        public MenuController(IMenuView _menuView, IMenuModel _menuModel) {
+        public MenuController(IMenuView _menuView, IMenuModel _menuModel)
+        {
             this.menuView = _menuView;
             this.menuModel = _menuModel;
         }
@@ -33,9 +34,9 @@ namespace SumoMVC.Controllers
             menuView.Exit();
         }
 
-        public void PlayOption()
+        public void PlayOption(GameController gameController)
         {
-            throw new NotImplementedException();
+            gameController.StartGame();
         }
 
         public void Ranking()

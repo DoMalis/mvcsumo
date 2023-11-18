@@ -9,9 +9,8 @@ namespace SumoMVC.Views
 {
     public interface IGameView
     {
-        void startGame();
-        void setupGame(IGameModel);
-        void drawGame();
-        void saveScore();
+
+
+        Player createPlayer(int id);
     }
 }

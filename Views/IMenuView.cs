@@ -12,7 +12,7 @@ namespace SumoMVC.Views
     {
         void ShowMenu(IMenuModel menu); 
         void About();
-        void PlayOption(GameController);
+        void PlayOption(GameController gameController);
         void Ranking();
         void Exit();
 

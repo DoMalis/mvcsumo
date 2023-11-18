@@ -53,7 +53,7 @@ namespace SumoMVC
                                 IGameView gameView = new GameView();
                                 IGameModel gameModel = new GameModel();
                                 GameController gameController=new GameController(gameView, gameModel);
-                                menuController.PlayOption(GameController);
+                                menuController.PlayOption(gameController);
                                 break;
                             case 1:
                                 menuController.DisplayAboutInformation();

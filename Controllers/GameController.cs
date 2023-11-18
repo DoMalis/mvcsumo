@@ -3,6 +3,7 @@ using SumoMVC.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,21 +20,21 @@ namespace SumoMVC.Controllers
             this.gameModel = gameModel;
         }
 
-        public void setupGame() {
-            gameView.setupGame(gameModel);
+
+        public void createPlayers()
+        {
+            gameModel.Player1=gameView.createPlayer(1);
+            gameModel.Player1=gameView.createPlayer(2);
+
         }
-
-
 
         public void StartGame()
         {
-
+            createPlayers();
 
         }
 
-        void startGame() { }
-        void drawGame() { }
-        void saveScore() { }
+
 
     }
 }
