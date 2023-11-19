@@ -28,6 +28,7 @@ namespace SumoMVC
                 Console.Clear();
                 menuController.ShowMenu();
 
+                
                 var key = Console.ReadKey(true);
 
                 switch (key.Key)

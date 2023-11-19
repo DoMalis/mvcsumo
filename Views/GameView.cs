@@ -329,26 +329,26 @@ namespace SumoMVC.Views
             if (keyPressed == ConsoleKey.LeftArrow && player2.x > 10 + 1)
             {
                 deletePlayerFromOldPositionInField(player2, sideLength);
-                //player2.Weight -= 1;
+                player2.Weight -= 1;
                 player2.x--;
             }
             if (keyPressed == ConsoleKey.UpArrow && player2.y > 8 + 1)
             {
 
                 deletePlayerFromOldPositionInField(player2, sideLength);
-                //player2.Weight -= 1;
+                player2.Weight -= 1;
                 player2.y--;
             }
             if (keyPressed == ConsoleKey.RightArrow && player2.x < 10 + 2 * sideLength - 1)
             {
                 deletePlayerFromOldPositionInField(player2, sideLength);
-                //player2.Weight -= 1;
+                player2.Weight -= 1;
                 player2.x++;
             }
             if (keyPressed == ConsoleKey.DownArrow && player2.y < 8 + sideLength)
             {
                 deletePlayerFromOldPositionInField(player2, sideLength);
-                //player2.Weight -= 1;
+                player2.Weight -= 1;
                 player2.y++;
             }
 
@@ -435,11 +435,26 @@ namespace SumoMVC.Views
 
         }
 
+        //TIMER
+        private void DisplayGameTime(Stopwatch gameTimer)
+        {
+            TimeSpan gameDuration = gameTimer.Elapsed;
+
+            // Clear the timer area at the bottom of the screen
+            Console.SetCursorPosition(0, Console.WindowHeight - 5);
+            Console.Write(new string(' ', Console.WindowWidth));
+
+            // Display the game time
+            Console.SetCursorPosition(0, Console.WindowHeight - 5);
+            Console.Write("Game Time: " + gameDuration.TotalSeconds.ToString("F0") + " sec");
+        }
+
         //LOGIKA DZIAŁANIA GRY
         public GameResult GameLogic(IGameModel gameModel)
         {
-            //Stopwatch gameTimer = new Stopwatch();
-            //System.Timers.Timer timer;
+            Stopwatch gameTimer = new Stopwatch();
+            System.Timers.Timer timer;
+
             int sideLength = 10;
             gameModel.Player1.x = 11;
             gameModel.Player1.y = 9;
@@ -450,10 +465,10 @@ namespace SumoMVC.Views
             int randNumber;
             Food food = new Food();
             ConsoleKey keyPressed;
-            //gameModel.gameTimer.Start();
-            //timer = new System.Timers.Timer(1000);// Timer będzie wyzwalać zdarzenie co 1 sekundę
-            //timer.Elapsed += (sender, e) => DisplayGameTime();
-            //timer.Start();
+            gameTimer.Restart();
+            timer = new System.Timers.Timer(1000);// Timer będzie wyzwalać zdarzenie co 1 sekundę
+            timer.Elapsed += (sender, e) => DisplayGameTime(gameTimer);
+            timer.Start();
             do
             {
                 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -544,7 +559,12 @@ namespace SumoMVC.Views
 
             } while (true);
 
-            TimeSpan time = TimeSpan.Parse("00:00:10");
+            timer.Stop();
+            gameTimer.Stop();
+
+            TimeSpan time = gameTimer.Elapsed;
+            //Console.WriteLine($"Czas trwania: {time}");
+            Console.ReadKey(true);
             return new GameResult((gameModel.Player1.Weight>gameModel.Player2.Weight) ? gameModel.Player1 : gameModel.Player2, time);
 
 
@@ -557,7 +577,7 @@ namespace SumoMVC.Views
             Console.Clear();
 
             Console.WriteLine("The winner is " + gameResult.PlayerName + "!");
-            //Console.WriteLine("Game duration: " + gameTimer.Elapsed.TotalSeconds.ToString("F0") + " seconds");
+            Console.WriteLine("Game duration: " + gameResult.Time.TotalSeconds.ToString("F0") + " seconds");
             Console.WriteLine(gameResult.PlayerName + ", do you want to save your score?(Y/N)");
             ConsoleKeyInfo key;
             do
@@ -569,6 +589,7 @@ namespace SumoMVC.Views
                     string resultFilePath;
                     // SaveGameResult(gameMode, player1.Nick, player1.Weight, gameTimer.Elapsed.TotalSeconds.ToString("F0"));
                     // Ranking(gameMode);
+
                     if (mode==0)
                     {
                         resultFilePath = "ranking.txt";
@@ -586,7 +607,9 @@ namespace SumoMVC.Views
                     }
                     using (StreamWriter writer = new StreamWriter(resultFilePath, true))
                     {
-                        writer.WriteLine(gameResult.PlayerName + "," + gameResult.Score + "," + gameResult.Time);
+                        
+                        Console.WriteLine(gameResult.Time.TotalSeconds.ToString("F0"));
+                        writer.WriteLine(gameResult.PlayerName + "," + gameResult.Score + "," + gameResult.Time.ToString(@"hh\:mm\:ss"));
                     }
                     Console.WriteLine("Your score is saved");
                     Console.WriteLine("\nPress any key to return to the menu.");

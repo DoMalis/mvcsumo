@@ -85,7 +85,11 @@ namespace SumoMVC.Views
                         int score = int.Parse(parts[1]);
                         string timeStr = parts[2];
                         TimeSpan gameTime = TimeSpan.Parse(timeStr);
-                        gameResults.Add(new GameResult { PlayerName = playerName, Score = score, Time = gameTime });
+
+                        Player player = new Player(playerName, 0);
+                        player.Weight=score;
+
+                        gameResults.Add(new GameResult (player, gameTime ));
                     }
                 }
             }
