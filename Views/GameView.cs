@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace SumoMVC.Views
 {
@@ -12,6 +13,8 @@ namespace SumoMVC.Views
     {
         // private Stopwatch gameTimer = new Stopwatch();
 
+
+        //WIDOK TWORZENIE GRACZA 
         public Player CreatePlayer(int playerId)
         {
             Console.Clear();
@@ -32,6 +35,8 @@ namespace SumoMVC.Views
             return player;
         }
 
+
+        //WIDOK WYBIERANIE TRYBU
         public int ChooseGameMode()
         {
             Console.Clear();
@@ -80,13 +85,18 @@ namespace SumoMVC.Views
 
 
             } while (keyPressed != ConsoleKey.Enter); //petla sie bedzie wykonywac dopoki nie wcisniemy enter
+            Console.Clear();
 
             return selectedIndex;
         }
 
-        public void CreateBattleField(IGameModel gameModel)
+
+
+        //WIDOK GRY
+        //GENEROWANIE PLANSZY:
+        public bool[,] CreateBattleField(IGameModel gameModel)
         {
-            //DisplayPlayersInformation(player1, player2); //wyswietlamy informacje o zawodnikach
+            //DisplayPlayersInformation(gameModel.Player1, gameModel.Player2); //wyswietlamy informacje o zawodnikach
 
             int sideLength = 10;
             int X0 = 10;
@@ -115,37 +125,33 @@ namespace SumoMVC.Views
             //obstacles
             if (gameModel.Mode == 0)
             {
-                //nie ma przeszkod
+                return null;
 
             }
             else if (gameModel.Mode == 1)
             {
-                CreateObstacles(gameModel.Player1, gameModel.Player2, sideLength);
+                return CreateObstacles(sideLength);
 
             }
             else if (gameModel.Mode == 2)
             {
-                CreateRandomObstacles(gameModel.Player1, gameModel.Player2, sideLength);
+                return CreateRandomObstacles(gameModel.Player1, gameModel.Player2, sideLength);
 
 
             }
-            else
-            {
-                return;
-            }
+
             //gameTimer.Restart();
-            //GameLogic(player1, player2, battlefieldsize, gameMode); //rozpoczyna się gra
+            //GameLogic(gameModel.Player1, gameModel.Player2, battlefieldsize, gameMode); //rozpoczyna się gra
             //Console.Clear();
             //Console.ReadKey(true);
             //RunMainMenu();
 
             Console.ReadKey(true);
+            return null;
+
         }
 
-
-
-
-        public void CreateObstacles(Player player1, Player player2, int sideLength)
+        public bool[,] CreateObstacles(int sideLength)
         {
             bool[,] obstacleGrid = new bool[2 * sideLength, sideLength]; // Inicjalizacja tablicy przeszkód
 
@@ -204,8 +210,9 @@ namespace SumoMVC.Views
                 Console.SetCursorPosition(obstacleX, obstacleY);
                 Console.Write('X');
             }
+            return obstacleGrid;
         }
-        private void CreateRandomObstacles(Player player1, Player player2, int sideLength)
+        private bool[,] CreateRandomObstacles(Player player1, Player player2, int sideLength)
         {
             bool[,] obstacleGrid = new bool[2 * sideLength, sideLength]; // inicjalizacja tablicy przeszkód
 
@@ -233,12 +240,17 @@ namespace SumoMVC.Views
                     i--; // jeśli pozycja koliduje powtarzamy iteracje
                 }
             }
-
+            return obstacleGrid;
         }
+        private bool CheckCollision(int x, int y, bool[,] obstacleGrid)
+        {
+            // sprawdzanie czy nowa pozycja koliduje z przeszkodą
+            return obstacleGrid[x - 11, y - 9];
+        }
+
 
         public void DisplayPlayersInformation(Player player1, Player player2)
         {
-            Console.Clear();
             Console.SetCursorPosition(0, 2);
             Console.Write(new string(' ', Console.WindowWidth));
             //wyswieltmay dane pierwszego gracza, ustawiamy miejsce od ktorego zaczynamy wypisywac dane
@@ -269,18 +281,348 @@ namespace SumoMVC.Views
 
 
         }
-        /*private void DisplayGameTime()
+
+        //PORUSZANIE SIE GRACZY:
+        private void deletePlayerFromOldPositionInField(Player player, int sideLength)
         {
-            TimeSpan gameDuration = gameTimer.Elapsed;
+            Console.SetCursorPosition(player.x, player.y);
+            if (player.y == 8 + sideLength) Console.Write("_");
+            else Console.Write(" ");
+        }
+        private void setPlayerInNewPositionInField(Player player)
+        {
+            Console.SetCursorPosition(player.x, player.y);
+            Console.Write(player.shape);
 
-            // Clear the timer area at the bottom of the screen
-            Console.SetCursorPosition(0, Console.WindowHeight - 5);
-            Console.Write(new string(' ', Console.WindowWidth));
+        }
+        private void MovingStandard(Player player1, Player player2, ConsoleKey keyPressed, int sideLength)
+        {
+            //obsluga klawiszy 1 zawodnika, po każdym wcisnieciu strzałki kasujemy pozycję gracza na planszy i stawiamy w nowym miejscu
+            if (keyPressed == ConsoleKey.A && player1.x > 10 + 1)
+            {
+                deletePlayerFromOldPositionInField(player1, sideLength);
+                player1.Weight -= 1;
+                player1.x--;
+            }
 
-            // Display the game time
-            Console.SetCursorPosition(0, Console.WindowHeight - 5);
-            Console.Write("Game Time: " + gameDuration.TotalSeconds.ToString("F0") + " sec");
-        }*/
+            if (keyPressed == ConsoleKey.W && player1.y > 8 + 1)
+            {
+                deletePlayerFromOldPositionInField(player1, sideLength);
+                player1.Weight -= 1;
+                player1.y--;
+            }
+            if (keyPressed == ConsoleKey.D && player1.x < 10 + 2 * sideLength - 1)
+            {
+                deletePlayerFromOldPositionInField(player1, sideLength);
+                player1.Weight -= 1;
+                player1.x++;
+            }
+            if (keyPressed == ConsoleKey.S && player1.y < 8 + sideLength)
+            {
+                deletePlayerFromOldPositionInField(player1, sideLength);
+                player1.Weight -= 1;
+                player1.y++;
+
+            }
+
+            //obsluga klawiszy 2 zawodnika
+            if (keyPressed == ConsoleKey.LeftArrow && player2.x > 10 + 1)
+            {
+                deletePlayerFromOldPositionInField(player2, sideLength);
+                //player2.Weight -= 1;
+                player2.x--;
+            }
+            if (keyPressed == ConsoleKey.UpArrow && player2.y > 8 + 1)
+            {
+
+                deletePlayerFromOldPositionInField(player2, sideLength);
+                //player2.Weight -= 1;
+                player2.y--;
+            }
+            if (keyPressed == ConsoleKey.RightArrow && player2.x < 10 + 2 * sideLength - 1)
+            {
+                deletePlayerFromOldPositionInField(player2, sideLength);
+                //player2.Weight -= 1;
+                player2.x++;
+            }
+            if (keyPressed == ConsoleKey.DownArrow && player2.y < 8 + sideLength)
+            {
+                deletePlayerFromOldPositionInField(player2, sideLength);
+                //player2.Weight -= 1;
+                player2.y++;
+            }
+
+        }
+        private void MovingWithObstacles(Player player1, Player player2, ConsoleKey keyPressed, int sideLength, bool[,] obstacleGrid)
+        {
+            //obsluga klawiszy 1 zawodnika, po każdym wcisnieciu strzałki kasujemy pozycję gracza na planszy i stawiamy w nowym miejscu
+            if (keyPressed == ConsoleKey.A && player1.x > 10 + 1)
+            {
+                if (!CheckCollision(player1.x - 1, player1.y, obstacleGrid))
+                {
+                    deletePlayerFromOldPositionInField(player1, sideLength);
+                    player1.Weight -= 1;
+                    player1.x--;
+                }
+            }
+
+            if (keyPressed == ConsoleKey.W && player1.y > 8 + 1)
+            {
+                if (!CheckCollision(player1.x, player1.y - 1, obstacleGrid))
+                {
+                    deletePlayerFromOldPositionInField(player1, sideLength);
+                    player1.Weight -= 1;
+                    player1.y--;
+                }
+            }
+            if (keyPressed == ConsoleKey.D && player1.x < 10 + 2 * sideLength - 1)
+            {
+                if (!CheckCollision(player1.x + 1, player1.y, obstacleGrid))
+                {
+                    deletePlayerFromOldPositionInField(player1, sideLength);
+                    player1.Weight -= 1;
+                    player1.x++;
+                }
+            }
+            if (keyPressed == ConsoleKey.S && player1.y < 8 + sideLength)
+            {
+                if (!CheckCollision(player1.x, player1.y + 1, obstacleGrid))
+                {
+                    deletePlayerFromOldPositionInField(player1, sideLength);
+                    player1.Weight -= 1;
+                    player1.y++;
+                }
+
+            }
+
+            //obsluga klawiszy 2 zawodnika
+            if (keyPressed == ConsoleKey.LeftArrow && player2.x > 10 + 1)
+            {
+                if (!CheckCollision(player2.x - 1, player2.y, obstacleGrid))
+                {
+                    deletePlayerFromOldPositionInField(player2, sideLength);
+                    player2.Weight -= 1;
+                    player2.x--;
+                }
+            }
+            if (keyPressed == ConsoleKey.UpArrow && player2.y > 8 + 1)
+            {
+                if (!CheckCollision(player2.x, player2.y - 1, obstacleGrid))
+                {
+                    deletePlayerFromOldPositionInField(player2, sideLength);
+                    player2.Weight -= 1;
+                    player2.y--;
+                }
+            }
+            if (keyPressed == ConsoleKey.RightArrow && player2.x < 10 + 2 * sideLength - 1)
+            {
+                if (!CheckCollision(player2.x + 1, player2.y, obstacleGrid))
+                {
+                    deletePlayerFromOldPositionInField(player2, sideLength);
+                    player2.Weight -= 1;
+                    player2.x++;
+                }
+            }
+            if (keyPressed == ConsoleKey.DownArrow && player2.y < 8 + sideLength)
+            {
+                if (!CheckCollision(player2.x, player2.y + 1, obstacleGrid))
+                {
+                    deletePlayerFromOldPositionInField(player2, sideLength);
+                    player2.Weight -= 1;
+                    player2.y++;
+                }
+            }
+
+        }
+
+        //LOGIKA DZIAŁANIA GRY
+        public GameResult GameLogic(IGameModel gameModel)
+        {
+            //Stopwatch gameTimer = new Stopwatch();
+            //System.Timers.Timer timer;
+            int sideLength = 10;
+            gameModel.Player1.x = 11;
+            gameModel.Player1.y = 9;
+            gameModel.Player2.x = 10 + 2 * sideLength - 1;
+            gameModel.Player2.y = 8 + sideLength;
+
+            Random random = new Random();
+            int randNumber;
+            Food food = new Food();
+            ConsoleKey keyPressed;
+            //gameModel.gameTimer.Start();
+            //timer = new System.Timers.Timer(1000);// Timer będzie wyzwalać zdarzenie co 1 sekundę
+            //timer.Elapsed += (sender, e) => DisplayGameTime();
+            //timer.Start();
+            do
+            {
+                //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+                //STEROWANIE ZAWODNIKAMI
+                ConsoleKeyInfo keyInfo = Console.ReadKey(true); //wczytujemy informacje o wcisnietym przycisku
+                keyPressed = keyInfo.Key; //przypisujemy wartosc wcisnietego przycisku
+                if (gameModel.Mode == 0)
+                {
+                    MovingStandard(gameModel.Player1, gameModel.Player2, keyPressed, sideLength);
+                }
+                else
+                {
+                    MovingWithObstacles(gameModel.Player1, gameModel.Player2, keyPressed, sideLength, gameModel.obstacleGrid);
+                }
+
+
+                //ustawiamy graczy w ich nowych pozycjach 
+                setPlayerInNewPositionInField(gameModel.Player2);
+                setPlayerInNewPositionInField(gameModel.Player1);
+
+
+
+
+                //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+                //GENEROWANIE JEDZONKA ABY NAKARMIĆ NASZE SUMO GLODOMORKI
+
+                randNumber = random.Next(1, 100);
+                if (randNumber % 5 == 0 && food.Eaten == true)  //jeśli jedzonko zostało już zjedzone, to moz ppowstać nowe
+                {
+                    bool foodGenerated = false;
+
+                    while (!foodGenerated)
+                    {
+                        food.kg = random.Next(1, 40);
+                        food.x = random.Next(11, 10 + 2 * sideLength - 1);
+                        food.y = random.Next(9, 8 + sideLength);
+                        if (gameModel.Mode == 0)
+                        {
+                            Console.SetCursorPosition(food.x, food.y);
+                            Console.Write('F');
+                            food.Eaten = false;
+                            foodGenerated = true;
+                        }
+                        else//warunek ze jedzenie nie bedzie sie genrowac na przeszkodach
+                        {
+                            if ((!gameModel.obstacleGrid[food.x - 11, food.y - 9]) &&
+                            (food.x != gameModel.Player1.x || food.y != gameModel.Player1.y) &&
+                            (food.x != gameModel.Player2.x || food.y != gameModel.Player2.y)
+                            )
+                            {
+                                Console.SetCursorPosition(food.x, food.y);
+                                Console.Write('F');
+                                food.Eaten = false;
+                                foodGenerated = true;
+                            }
+                        }
+
+                    }
+
+                }
+
+
+
+                //-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=--==-=-=-
+                //Co sie stanie jak glodomorki zjedzą ??
+
+                if ((gameModel.Player1.x == food.x && gameModel.Player1.y == food.y))
+                {
+                    food.Eaten = true;
+                    gameModel.Player1.Weight += food.kg;
+
+                }
+
+                if (gameModel.Player2.x == food.x && gameModel.Player2.y == food.y)
+                {
+                    food.Eaten = true;
+                    gameModel.Player2.Weight += food.kg;
+                }
+
+                DisplayPlayersInformation(gameModel.Player1, gameModel.Player2);
+
+
+                if (gameModel.Player1.x==gameModel.Player2.x && gameModel.Player1.y==gameModel.Player2.y && gameModel.Player1.Weight!=gameModel.Player2.Weight)
+                    break;
+                if (gameModel.Player1.Weight<=0 || gameModel.Player2.Weight<=0)
+                    break;
+
+
+            } while (true);
+
+            TimeSpan time = TimeSpan.Parse("00:00:10");
+            return new GameResult((gameModel.Player1.Weight>gameModel.Player2.Weight) ? gameModel.Player1 : gameModel.Player2, time);
+
+
+        }
+
+
+        //WIDOK KOŃCA GRY
+        public void EndGame(GameResult gameResult, int mode)
+        {
+            Console.Clear();
+
+            Console.WriteLine("The winner is " + gameResult.PlayerName + "!");
+            //Console.WriteLine("Game duration: " + gameTimer.Elapsed.TotalSeconds.ToString("F0") + " seconds");
+            Console.WriteLine(gameResult.PlayerName + ", do you want to save your score?(Y/N)");
+            ConsoleKeyInfo key;
+            do
+            {
+                key = Console.ReadKey(true);
+                if (key.Key == ConsoleKey.Y)//jesli tak
+                {
+                    //zapisanie do rankingu
+                    string resultFilePath;
+                    // SaveGameResult(gameMode, player1.Nick, player1.Weight, gameTimer.Elapsed.TotalSeconds.ToString("F0"));
+                    // Ranking(gameMode);
+                    if (mode==0)
+                    {
+                        resultFilePath = "ranking.txt";
+
+                    }
+                    else if (mode ==1)
+                    {
+                        resultFilePath = "rankingStatic.txt";
+
+                    }
+                    else
+                    {
+                        resultFilePath = "rankingRandom.txt";
+
+                    }
+                    using (StreamWriter writer = new StreamWriter(resultFilePath, true))
+                    {
+                        writer.WriteLine(gameResult.PlayerName + "," + gameResult.Score + "," + gameResult.Time);
+                    }
+                    Console.WriteLine("Your score is saved");
+                    Console.WriteLine("\nPress any key to return to the menu.");
+
+                    Console.ReadKey(true);
+                    return;
+                }
+                else if (key.Key == ConsoleKey.N)//jesli nie
+                {
+                    return;
+                }
+            } while (key.Key != ConsoleKey.Y || key.Key != ConsoleKey.N);
+
+        }
+
+
+
+
+
+
+
+
+
+
+        /*private void DisplayGameTime()
+    {
+    TimeSpan gameDuration = gameTimer.Elapsed;
+
+    // Clear the timer area at the bottom of the screen
+    Console.SetCursorPosition(0, Console.WindowHeight - 5);
+    Console.Write(new string(' ', Console.WindowWidth));
+
+    // Display the game time
+    Console.SetCursorPosition(0, Console.WindowHeight - 5);
+    Console.Write("Game Time: " + gameDuration.TotalSeconds.ToString("F0") + " sec");
+    }*/
 
     }
 }

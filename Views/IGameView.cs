@@ -9,12 +9,21 @@ namespace SumoMVC.Views
 {
     public interface IGameView
     {
-        void DisplayPlayersInformation(Player player1, Player player2);
-        //void DisplayGameTime(TimeSpan gameDuration);
+        //
+        Player CreatePlayer(int id);
 
-
-        Player CreatePlayer(int id);//idk czy to tu powinno byc
+        //
         int ChooseGameMode();
-        void CreateBattleField(IGameModel gameModel);
+
+        //
+        void DisplayPlayersInformation(Player player, Player player2);
+        bool[,] CreateBattleField(IGameModel gameModel);
+        GameResult GameLogic(IGameModel gameModel);
+
+        //
+        void EndGame(GameResult gameResult, int mode);
+
+
+        //void DisplayGameTime(TimeSpan gameDuration);
     }
 }

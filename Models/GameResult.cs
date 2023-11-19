@@ -11,6 +11,16 @@ namespace SumoMVC.Models
         public string PlayerName { get; set; }
         public int Score { get; set; }
         public TimeSpan Time { get; set; }
+
+
+        public GameResult(Player player, TimeSpan time)
+        {
+            this.PlayerName=player.Nick;
+            this.Score=player.Weight;
+            this.Time = time;
+
+        }
+
     }
 
 }

@@ -10,11 +10,11 @@ namespace SumoMVC.Models
 {
     public interface IGameModel
     {
-        Board Board { get; set; }
+        bool[,] obstacleGrid { get; set; }
         Player Player1 { get; set; }
         Player Player2 { get; set; }
         int Mode {  get; set; }
-        Stopwatch gameTimer { get; set; }
+        public GameResult GameResult { get; set; }
 
 
     }
