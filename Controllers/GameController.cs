@@ -19,8 +19,6 @@ namespace SumoMVC.Controllers
             this.gameView = gameView;
             this.gameModel = gameModel;
         }
-
-
         public void createPlayers()
         {
             gameModel.Player1=gameView.createPlayer(1);

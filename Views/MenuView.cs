@@ -68,9 +68,6 @@ namespace SumoMVC.Views
 
         }
 
-        public void PlayOption(GameController gameController)
-        {
-        }
 
         public void Ranking()
         {
