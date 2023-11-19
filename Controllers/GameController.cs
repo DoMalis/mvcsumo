@@ -33,11 +33,16 @@ namespace SumoMVC.Controllers
         {
             gameView.CreateBattleField(gameModel);
         }
+        public void DisplayPlayerInformation()
+        {
+            gameView.DisplayPlayersInformation(gameModel.Player1,gameModel.Player2);
+        }
 
         public void StartGame()
         {
             CreatePlayers();
             ChooseGameMode();
+            DisplayPlayerInformation();
             CreateBattleField();
 
 

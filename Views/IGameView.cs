@@ -9,7 +9,7 @@ namespace SumoMVC.Views
 {
     public interface IGameView
     {
-        //void DisplayPlayersInformation(Player player1, Player player2);
+        void DisplayPlayersInformation(Player player1, Player player2);
         //void DisplayGameTime(TimeSpan gameDuration);
 
 

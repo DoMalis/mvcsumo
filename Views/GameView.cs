@@ -237,8 +237,9 @@ namespace SumoMVC.Views
         }
 
         //jezu to chyba nie bedzie tutaj ja pierdole
-        /*private void DisplayPlayersInformation(Player player1, Player player2)
+        public void DisplayPlayersInformation(Player player1, Player player2)
         {
+            Console.Clear();
             Console.SetCursorPosition(0, 2);
             Console.Write(new string(' ', Console.WindowWidth));
             //wyswieltmay dane pierwszego gracza, ustawiamy miejsce od ktorego zaczynamy wypisywac dane
@@ -269,7 +270,7 @@ namespace SumoMVC.Views
 
 
         }
-        private void DisplayGameTime()
+        /*private void DisplayGameTime()
         {
             TimeSpan gameDuration = gameTimer.Elapsed;
 
