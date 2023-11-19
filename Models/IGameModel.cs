@@ -1,4 +1,4 @@
-﻿using SumoMVC.ENum;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,7 +13,7 @@ namespace SumoMVC.Models
         Board Board { get; set; }
         Player Player1 { get; set; }
         Player Player2 { get; set; }
-        Mode Mode {  get; set; }
+        int Mode {  get; set; }
         Stopwatch gameTimer { get; set; }
 
 

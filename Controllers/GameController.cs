@@ -29,7 +29,7 @@ namespace SumoMVC.Controllers
         }
         public void ChooseGameMode()
         {
-            //gameModel.Mode = gameView.ChooseGameMode();
+            gameModel.Mode = gameView.ChooseGameMode();
         }
         public void StartGame()
         {

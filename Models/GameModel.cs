@@ -1,4 +1,4 @@
-﻿using SumoMVC.ENum;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,7 +13,7 @@ namespace SumoMVC.Models
         public Board Board { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public Player Player1 { get; set; }
         public Player Player2 { get; set; }
-        public Mode Mode { get ; set; }
+        public int Mode { get ; set; }
         public Stopwatch gameTimer { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     }
 }

@@ -1,4 +1,4 @@
-﻿using SumoMVC.ENum;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +18,7 @@ namespace SumoMVC.Models
         int x0;
         int y0;
 
-        public Board(Mode mode)
+        public Board(int mode)
         {
             //???
 

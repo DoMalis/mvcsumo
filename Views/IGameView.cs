@@ -14,6 +14,6 @@ namespace SumoMVC.Views
 
 
         Player createPlayer(int id);//idk czy to tu powinno byc
-        //int ChooseGameMode(IMenuModel menu);
+        int ChooseGameMode();
     }
 }

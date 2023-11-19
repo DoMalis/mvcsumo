@@ -10,7 +10,7 @@ namespace SumoMVC.Views
 {
     public class GameView : IGameView
     {
-       // private Stopwatch gameTimer = new Stopwatch();
+        // private Stopwatch gameTimer = new Stopwatch();
 
         public Player createPlayer(int playerId)
         {
@@ -26,23 +26,65 @@ namespace SumoMVC.Views
                 }
 
             } while (string.IsNullOrWhiteSpace(nazwa));
-            Player player = new Player(nazwa,playerId);
+            Player player = new Player(nazwa, playerId);
             if (playerId == 1) player.shape = '+';
             else player.shape = 'o';
             return player;
         }
-        /*public int ChooseGameMode(IMenuModel menu)
+        public int ChooseGameMode()
         {
             Console.Clear();
             string[] options = { "standard", "static", "random" };
             string prompt = "Choose game mode ";
-            Console.WriteLine(menu.Prompt);
+            Console.WriteLine(prompt);
+            int selectedIndex = 0;
+            ConsoleKey keyPressed;
+            do
+            {
+                Console.Clear(); //czyscimy konsole
+                Console.WriteLine(prompt);
+                for (int i = 0; i < options.Length; i++)
+                {
+                    string prefix;
+                    if (i == selectedIndex)
+                    {
+                        prefix = "*";
+                    }
+                    else
+                    {
+                        prefix = " ";
+                    }
+                    Console.WriteLine($"{prefix} << {options[i]} >>");
+                }
+                ConsoleKeyInfo keyInfo = Console.ReadKey(true); //wczytujemy informacje o wcisnietym przycisku
+                keyPressed = keyInfo.Key; //przypisujemy wartosc wcisnietego przycisku
 
-            //int selectedindex = sizeMenu.Run();
+                if (keyPressed == ConsoleKey.DownArrow) //jesli wcisnieta jest strzalka w dol
+                {
+                    selectedIndex++;
+                    if (selectedIndex == options.Length)
+                    {
+                        selectedIndex = 0;
+                    }
+                }
+                else if (keyPressed == ConsoleKey.UpArrow) //jesli wcisnieta jest strzalka w gore
+                {
+                    selectedIndex--;
+                    if (selectedIndex == -1)
+                    {
+                        selectedIndex = options.Length-1;
+                    }
 
-            //return selectedindex;
-            
-        }*/
+                }
+
+
+            } while (keyPressed != ConsoleKey.Enter); //petla sie bedzie wykonywac dopoki nie wcisniemy enter
+
+            return selectedIndex;
+        }
+
+
+
         //jezu to chyba nie bedzie tutaj ja pierdole
         /*private void DisplayPlayersInformation(Player player1, Player player2)
         {
@@ -91,3 +133,4 @@ namespace SumoMVC.Views
 
     }
 }
+
