@@ -236,7 +236,6 @@ namespace SumoMVC.Views
 
         }
 
-        //jezu to chyba nie bedzie tutaj ja pierdole
         public void DisplayPlayersInformation(Player player1, Player player2)
         {
             Console.Clear();
