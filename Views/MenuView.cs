@@ -67,7 +67,46 @@ namespace SumoMVC.Views
             }
 
         }
+        public void LoadGameResults(string resultFilePath)
+        {
+            List<GameResult> gameResults = new List<GameResult>();
+            if (File.Exists(resultFilePath))
+            {
+                // Odczytujemy wszystkie linie z pliku rankingowego
+                string[] lines = File.ReadAllLines(resultFilePath);
 
+                foreach (string line in lines)
+                {
+                    // Dzielimy linię na nazwę gracza i wynik
+                    string[] parts = line.Split(',');
+                    if (parts.Length == 3)
+                    {
+                        string playerName = parts[0];
+                        int score = int.Parse(parts[1]);
+                        string timeStr = parts[2];
+                        TimeSpan gameTime = TimeSpan.Parse(timeStr);
+                        gameResults.Add(new GameResult { PlayerName = playerName, Score = score, Time = gameTime });
+                    }
+                }
+            }
+            if (gameResults.Count > 0)
+            {
+                // Sortujemy wyniki malejąco według punktów
+                gameResults = gameResults.OrderBy(result => result.Time).ThenByDescending(result => result.Score).ToList();
+
+                int position = 1;
+                foreach (var result in gameResults)
+                {
+                    Console.WriteLine($"{position}. {result.PlayerName}| {result.Score} points |{result.Time.TotalSeconds} seconds");
+                    position++;
+                }
+            }
+            else
+            {
+                Console.WriteLine("No results in the ranking yet.");
+            }
+
+        }
 
         public void Ranking()
         {
@@ -81,15 +120,19 @@ namespace SumoMVC.Views
                                  |___/ ";
             Console.Clear();
             Console.WriteLine(prompt);
+            string resultFilePath = "ranking.txt";
+            LoadGameResults(resultFilePath);
+            Console.WriteLine("-----------------------------------");
+            resultFilePath = "rankingStatic.txt";
+            LoadGameResults(resultFilePath);
+            Console.WriteLine("-----------------------------------");
+            resultFilePath = "rankingRandom.txt";
+            LoadGameResults(resultFilePath);
+            Console.WriteLine("\nPress any key to return to the main menu.");
             Console.ReadKey(true);
         }
     }
-
-
-
-
-
-
+    
 
 
 }
