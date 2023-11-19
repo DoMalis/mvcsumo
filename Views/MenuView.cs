@@ -10,8 +10,6 @@ namespace SumoMVC.Views
 {
     public class MenuView : IMenuView
     {
-
-
         public void ShowMenu(IMenuModel menu)
         {
             Console.WriteLine(menu.Prompt);
@@ -76,7 +74,17 @@ namespace SumoMVC.Views
 
         public void Ranking()
         {
-            throw new NotImplementedException();
+            string prompt = @" _____             _    _             
+ |  __ \           | |  (_)            
+ | |__) |__ _ _ __ | | ___ _ __   __ _ 
+ |  _  // _` | '_ \| |/ / | '_ \ / _` |
+ | | \ \ (_| | | | |   <| | | | | (_| |
+ |_|  \_\__,_|_| |_|_|\_\_|_| |_|\__, |
+                                  __/ |
+                                 |___/ ";
+            Console.Clear();
+            Console.WriteLine(prompt);
+            Console.ReadKey(true);
         }
     }
 

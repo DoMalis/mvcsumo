@@ -27,10 +27,14 @@ namespace SumoMVC.Controllers
             gameModel.Player1=gameView.createPlayer(2);
 
         }
-
+        public void ChooseGameMode()
+        {
+            //gameModel.Mode = gameView.ChooseGameMode();
+        }
         public void StartGame()
         {
             createPlayers();
+            ChooseGameMode();
 
         }
 

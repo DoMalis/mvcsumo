@@ -41,7 +41,7 @@ namespace SumoMVC.Controllers
 
         public void Ranking()
         {
-            throw new NotImplementedException();
+            menuView.Ranking();
         }
 
 
