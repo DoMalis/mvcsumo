@@ -248,7 +248,7 @@ namespace SumoMVC.Views
             return obstacleGrid[x - 11, y - 9];
         }
 
-        //DANE GRACZY NA GÓRZE EKRANU:
+
         public void DisplayPlayersInformation(Player player1, Player player2)
         {
             Console.SetCursorPosition(0, 2);
