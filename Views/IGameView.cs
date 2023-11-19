@@ -13,7 +13,8 @@ namespace SumoMVC.Views
         //void DisplayGameTime(TimeSpan gameDuration);
 
 
-        Player createPlayer(int id);//idk czy to tu powinno byc
+        Player CreatePlayer(int id);//idk czy to tu powinno byc
         int ChooseGameMode();
+        void CreateBattleField(IGameModel gameModel);
     }
 }

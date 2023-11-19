@@ -19,22 +19,33 @@ namespace SumoMVC.Controllers
             this.gameView = gameView;
             this.gameModel = gameModel;
         }
-        public void createPlayers()
+        public void CreatePlayers()
         {
-            gameModel.Player1=gameView.createPlayer(1);
-            gameModel.Player1=gameView.createPlayer(2);
+            gameModel.Player1=gameView.CreatePlayer(1);
+            gameModel.Player2=gameView.CreatePlayer(2);
 
         }
         public void ChooseGameMode()
         {
             gameModel.Mode = gameView.ChooseGameMode();
         }
+        public void CreateBattleField()
+        {
+            gameView.CreateBattleField(gameModel);
+        }
+
         public void StartGame()
         {
-            createPlayers();
+            CreatePlayers();
             ChooseGameMode();
+            CreateBattleField();
+
+
+
 
         }
+
+
 
 
 

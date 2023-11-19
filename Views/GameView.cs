@@ -12,7 +12,7 @@ namespace SumoMVC.Views
     {
         // private Stopwatch gameTimer = new Stopwatch();
 
-        public Player createPlayer(int playerId)
+        public Player CreatePlayer(int playerId)
         {
             Console.Clear();
             Console.WriteLine("Wprowadź nazwę " + playerId + " gracza: ");
@@ -31,6 +31,7 @@ namespace SumoMVC.Views
             else player.shape = 'o';
             return player;
         }
+
         public int ChooseGameMode()
         {
             Console.Clear();
@@ -83,7 +84,157 @@ namespace SumoMVC.Views
             return selectedIndex;
         }
 
+        public void CreateBattleField(IGameModel gameModel)
+        {
+            //DisplayPlayersInformation(player1, player2); //wyswietlamy informacje o zawodnikach
 
+            int sideLength = 10;
+            int X0 = 10;
+            int Y0 = 8;
+            for (int i = 1; i <= 2 * sideLength; i++)
+            {
+                Console.SetCursorPosition(X0 + i, Y0);
+                Console.Write("_");
+            }
+            for (int i = 1; i <= sideLength; i++)
+            {
+                Console.SetCursorPosition(X0, Y0 + i);
+                Console.Write("|");
+            }
+            for (int i = 1; i <= 2 * sideLength; i++)
+            {
+                Console.SetCursorPosition(X0 + i, Y0 + sideLength);
+                Console.Write("_");
+            }
+            for (int i = 1; i <= sideLength; i++)
+            {
+                Console.SetCursorPosition(X0 + 2 * sideLength, Y0 + i);
+                Console.Write("|");
+            }
+
+            //obstacles
+            if (gameModel.Mode == 0)
+            {
+                //nie ma przeszkod
+
+            }
+            else if (gameModel.Mode == 1)
+            {
+                CreateObstacles(gameModel.Player1, gameModel.Player2, sideLength);
+
+            }
+            else if (gameModel.Mode == 2)
+            {
+                CreateRandomObstacles(gameModel.Player1, gameModel.Player2, sideLength);
+
+
+            }
+            else
+            {
+                return;
+            }
+            //gameTimer.Restart();
+            //GameLogic(player1, player2, battlefieldsize, gameMode); //rozpoczyna się gra
+            //Console.Clear();
+            //Console.ReadKey(true);
+            //RunMainMenu();
+
+            Console.ReadKey(true);
+        }
+
+
+
+
+        public void CreateObstacles(Player player1, Player player2, int sideLength)
+        {
+            bool[,] obstacleGrid = new bool[2 * sideLength, sideLength]; // Inicjalizacja tablicy przeszkód
+
+            // Stałe współrzędne przeszkód
+            int obstacleStartX = 15;
+            int obstacleStartY = 10;
+
+            Console.SetCursorPosition(0, 0); // Kursor na początek planszy
+
+            for (int i = 0; i < 5; i++)
+            {
+                int obstacleX = obstacleStartX + i;
+                int obstacleY = obstacleStartY;
+
+                obstacleGrid[obstacleX - 11, obstacleY - 9] = true; // Ustawienie komórki jako zajętą
+
+                Console.SetCursorPosition(obstacleX, obstacleY);
+                Console.Write('X');
+            }
+
+            obstacleStartX = 17;
+            obstacleStartY = 17;
+            for (int i = 0; i < 5; i++)
+            {
+                int obstacleX = obstacleStartX + i;
+                int obstacleY = obstacleStartY;
+
+                obstacleGrid[obstacleX - 11, obstacleY - 9] = true; // Ustawienie komórki jako zajętą
+
+                Console.SetCursorPosition(obstacleX, obstacleY);
+                Console.Write('X');
+            }
+
+            obstacleStartX = 20;
+            obstacleStartY = 13;
+            for (int i = 0; i < 5; i++)
+            {
+                int obstacleX = obstacleStartX + i;
+                int obstacleY = obstacleStartY;
+
+                obstacleGrid[obstacleX - 11, obstacleY - 9] = true; // Ustawienie komórki jako zajętą
+
+                Console.SetCursorPosition(obstacleX, obstacleY);
+                Console.Write('X');
+            }
+
+            obstacleStartX = 13;
+            obstacleStartY = 14;
+            for (int i = 0; i < 3; i++)
+            {
+                int obstacleY = obstacleStartY + i;
+                int obstacleX = obstacleStartX;
+
+                obstacleGrid[obstacleX - 11, obstacleY - 9] = true; // ustawienie komórki jako zajętą
+
+                Console.SetCursorPosition(obstacleX, obstacleY);
+                Console.Write('X');
+            }
+        }
+        private void CreateRandomObstacles(Player player1, Player player2, int sideLength)
+        {
+            bool[,] obstacleGrid = new bool[2 * sideLength, sideLength]; // inicjalizacja tablicy przeszkód
+
+            Console.SetCursorPosition(0, 0); // kursor na początek planszy
+
+            Random random = new Random();
+
+            for (int i = 0; i < 8; i++)
+            {
+                int obstacleX = random.Next(11, 10 + 2 * sideLength - 1);
+                int obstacleY = random.Next(9, 8 + sideLength);
+
+                // sprawdzanie czy nowa pozycja przeszkody koliduje z innymi przeszkodami lub graczami
+                if ((!obstacleGrid[obstacleX - 11, obstacleY - 9]) &&
+                    (obstacleX != player1.x || obstacleY != player1.y) &&
+                    (obstacleX != player2.x || obstacleY != player2.y))
+                {
+                    obstacleGrid[obstacleX - 11, obstacleY - 9] = true; // ustawienie komórki jako zajętą
+
+                    Console.SetCursorPosition(obstacleX, obstacleY);
+                    Console.Write('X');
+                }
+                else
+                {
+                    i--; // jeśli pozycja koliduje powtarzamy iteracje
+                }
+            }
+
+        }
 
         //jezu to chyba nie bedzie tutaj ja pierdole
         /*private void DisplayPlayersInformation(Player player1, Player player2)
