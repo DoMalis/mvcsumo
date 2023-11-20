@@ -10,11 +10,23 @@ namespace SumoMVC.Models
 {
     public class GameModel : IGameModel
     {
-        public bool[,]? obstacleGrid {  get; set; }
-            public Player Player1 { get; set; }
+        public bool[,]? ObstacleGrid { get; set; }
+        public Player Player1 { get; set; }
         public Player Player2 { get; set; }
-        public int Mode { get ; set; }  
+        public int Mode { get; set; }
         public GameResult GameResult { get; set; }
-        public int sideLength { get; set; }
+        public int SideLength { get; set; }
+        public int X0 { get; set; }
+        public int Y0 { get; set; }
+
+        public GameModel()
+        {
+            SideLength = 10;
+            X0 = 10;
+            Y0 = 8;
+        }
+
+
+
     }
 }

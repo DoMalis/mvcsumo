@@ -22,8 +22,8 @@ namespace SumoMVC.Views
         void DisplayFood(Food food);
         void DisplayGameTime(Stopwatch gameTimer);
         void setPlayerInNewPositionInField(Player player);
-        void deletePlayerFromOldPositionInField(Player player, int sideLength);
-        public void DisplayBattleFieldBorders();
+        void deletePlayerFromOldPositionInField(Player player, int sideLength, int y);
+        public void DisplayBattleFieldBorders(int x0, int y0, int length);
         
 
 

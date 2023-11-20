@@ -95,12 +95,12 @@ namespace SumoMVC.Views
 
         //WIDOK GRY
         //GENEROWANIE PLANSZY:
-        public void DisplayBattleFieldBorders()
+        public void DisplayBattleFieldBorders(int x0, int y0, int length)
         {
 
-            int sideLength = 10;
-            int X0 = 10;
-            int Y0 = 8;
+            int sideLength = length;
+            int X0 = x0;
+            int Y0 = y0;
             for (int i = 1; i <= 2 * sideLength; i++)
             {
                 Console.SetCursorPosition(X0 + i, Y0);
@@ -290,10 +290,10 @@ namespace SumoMVC.Views
         }
 
         //PORUSZANIE SIE GRACZY:
-        public void deletePlayerFromOldPositionInField(Player player, int sideLength)
+        public void deletePlayerFromOldPositionInField(Player player, int sideLength, int y0)
         {
             Console.SetCursorPosition(player.x, player.y);
-            if (player.y == 8 + sideLength) Console.Write("_");
+            if (player.y == y0 + sideLength) Console.Write("_");
             else Console.Write(" ");
         }
         public void setPlayerInNewPositionInField(Player player)

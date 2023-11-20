@@ -12,8 +12,8 @@ namespace SumoMVC.Controllers
 {
     public class GameController
     {
-        private IGameView gameView;
-        private IGameModel gameModel;
+        public IGameView gameView;
+        public IGameModel gameModel;
 
         public GameController(IGameView gameView, IGameModel gameModel)
         {
@@ -46,8 +46,8 @@ namespace SumoMVC.Controllers
        public void CreateGameView()
        {
             gameView.DisplayPlayersInformation(gameModel.Player1, gameModel.Player2);
-            gameView.DisplayBattleFieldBorders();
-            gameModel.obstacleGrid=GenerateObstacles(gameModel,10);
+            gameView.DisplayBattleFieldBorders(gameModel.X0,gameModel.Y0,gameModel.SideLength);
+            gameModel.ObstacleGrid=GenerateObstacles(gameModel.SideLength);
        }
 
 
@@ -62,11 +62,16 @@ namespace SumoMVC.Controllers
             Stopwatch gameTimer = new Stopwatch();
             System.Timers.Timer timer;
 
-            int sideLength = 10;
+            /* int sideLength = 10;
             gameModel.Player1.x = 11;
             gameModel.Player1.y = 9;
             gameModel.Player2.x = 10 + 2 * sideLength - 1;
-            gameModel.Player2.y = 8 + sideLength;
+            gameModel.Player2.y = 8 + sideLength;*/
+            int sideLength = gameModel.SideLength;
+            gameModel.Player1.x = gameModel.X0+1;
+            gameModel.Player1.y = gameModel.Y0+1;
+            gameModel.Player2.x = gameModel.X0 + 2 * sideLength - 1;
+            gameModel.Player2.y = gameModel.Y0 + sideLength;
 
             Random random = new Random();
             int randNumber;
@@ -88,7 +93,7 @@ namespace SumoMVC.Controllers
                 }
                 else
                 {
-                    MovingWithObstacles(gameModel.Player1, gameModel.Player2, keyPressed, sideLength, gameModel.obstacleGrid);
+                    MovingWithObstacles(gameModel.Player1, gameModel.Player2, keyPressed, sideLength, gameModel.ObstacleGrid);
                 }
 
 
@@ -105,7 +110,7 @@ namespace SumoMVC.Controllers
                 randNumber = random.Next(1, 100);
                 if (randNumber % 5 == 0 && food.Eaten == true)  //jeśli jedzonko zostało już zjedzone, to moz ppowstać nowe
                 {
-                    food=FoodGenerator(gameModel, sideLength);
+                    food=FoodGenerator(gameModel.SideLength);
 
                 }
 
@@ -145,108 +150,108 @@ namespace SumoMVC.Controllers
             gameModel.GameResult= new GameResult((gameModel.Player1.Weight>gameModel.Player2.Weight) ? gameModel.Player1 : gameModel.Player2, time);
         }
       
-        private bool CheckCollision(int x, int y, bool[,] obstacleGrid)
+        public bool CheckCollision(int x, int y, bool[,] obstacleGrid)
         {
             // sprawdzanie czy nowa pozycja koliduje z przeszkodą
-            return obstacleGrid[x - 11, y - 9];
+            return obstacleGrid[x - (gameModel.X0+1), y - (gameModel.Y0+1)];
         }
 
 
         //OBSŁUGA PORUSZANIA SIĘ
-        private void MovingStandard(Player player1, Player player2, ConsoleKey keyPressed, int sideLength)
+        public void MovingStandard(Player player1, Player player2, ConsoleKey keyPressed, int sideLength)
         {
             //obsluga klawiszy 1 zawodnika, po każdym wcisnieciu strzałki kasujemy pozycję gracza na planszy i stawiamy w nowym miejscu
-            if (keyPressed == ConsoleKey.A && player1.x > 10 + 1)
+            if (keyPressed == ConsoleKey.A && player1.x > gameModel.X0 + 1)
             {
-                gameView.deletePlayerFromOldPositionInField(player1, sideLength);
+                    gameView.deletePlayerFromOldPositionInField(player1, sideLength, gameModel.Y0);
                 player1.Weight -= 1;
                 player1.x--;
             }
 
-            if (keyPressed == ConsoleKey.W && player1.y > 8 + 1)
+            if (keyPressed == ConsoleKey.W && player1.y > gameModel.Y0 + 1)
             {
-                gameView.deletePlayerFromOldPositionInField(player1, sideLength);
+                    gameView.deletePlayerFromOldPositionInField(player1, sideLength, gameModel.Y0);
                 player1.Weight -= 1;
                 player1.y--;
             }
-            if (keyPressed == ConsoleKey.D && player1.x < 10 + 2 * sideLength - 1)
+            if (keyPressed == ConsoleKey.D && player1.x < gameModel.X0 + 2 * sideLength - 1)
             {
-                gameView.deletePlayerFromOldPositionInField(player1, sideLength);
+                    gameView.deletePlayerFromOldPositionInField(player1, sideLength, gameModel.Y0);
                 player1.Weight -= 1;
                 player1.x++;
             }
-            if (keyPressed == ConsoleKey.S && player1.y < 8 + sideLength)
+            if (keyPressed == ConsoleKey.S && player1.y < gameModel.Y0 + sideLength)
             {
-                gameView.deletePlayerFromOldPositionInField(player1, sideLength);
+                    gameView.deletePlayerFromOldPositionInField(player1, sideLength, gameModel.Y0);
                 player1.Weight -= 1;
                 player1.y++;
 
             }
 
             //obsluga klawiszy 2 zawodnika
-            if (keyPressed == ConsoleKey.LeftArrow && player2.x > 10 + 1)
+            if (keyPressed == ConsoleKey.LeftArrow && player2.x > gameModel.X0 + 1)
             {
-                gameView.deletePlayerFromOldPositionInField(player2, sideLength);
+                    gameView.deletePlayerFromOldPositionInField(player2, sideLength, gameModel.Y0);
                 player2.Weight -= 1;
                 player2.x--;
             }
-            if (keyPressed == ConsoleKey.UpArrow && player2.y > 8 + 1)
+            if (keyPressed == ConsoleKey.UpArrow && player2.y > gameModel.Y0 + 1)
             {
 
-                gameView.deletePlayerFromOldPositionInField(player2, sideLength);
+                    gameView.deletePlayerFromOldPositionInField(player2, sideLength, gameModel.Y0);
                 player2.Weight -= 1;
                 player2.y--;
             }
-            if (keyPressed == ConsoleKey.RightArrow && player2.x < 10 + 2 * sideLength - 1)
+            if (keyPressed == ConsoleKey.RightArrow && player2.x < gameModel.X0 + 2 * sideLength - 1)
             {
-                gameView.deletePlayerFromOldPositionInField(player2, sideLength);
+                    gameView.deletePlayerFromOldPositionInField(player2, sideLength, gameModel.Y0);
                 player2.Weight -= 1;
                 player2.x++;
             }
-            if (keyPressed == ConsoleKey.DownArrow && player2.y < 8 + sideLength)
+            if (keyPressed == ConsoleKey.DownArrow && player2.y < gameModel.Y0 + sideLength)
             {
-                gameView.deletePlayerFromOldPositionInField(player2, sideLength);
+                    gameView.deletePlayerFromOldPositionInField(player2, sideLength, gameModel.Y0);
                 player2.Weight -= 1;
                 player2.y++;
             }
 
         }
-        private void MovingWithObstacles(Player player1, Player player2, ConsoleKey keyPressed, int sideLength, bool[,] obstacleGrid)
+        public void MovingWithObstacles(Player player1, Player player2, ConsoleKey keyPressed, int sideLength, bool[,] obstacleGrid)
         {
             //obsluga klawiszy 1 zawodnika, po każdym wcisnieciu strzałki kasujemy pozycję gracza na planszy i stawiamy w nowym miejscu
-            if (keyPressed == ConsoleKey.A && player1.x > 10 + 1)
+            if (keyPressed == ConsoleKey.A && player1.x > gameModel.X0 + 1)
             {
                 if (!CheckCollision(player1.x - 1, player1.y, obstacleGrid))
                 {
-                    gameView.deletePlayerFromOldPositionInField(player1, sideLength);
+                    gameView.deletePlayerFromOldPositionInField(player1, sideLength, gameModel.Y0);
                     player1.Weight -= 1;
                     player1.x--;
                 }
             }
 
-            if (keyPressed == ConsoleKey.W && player1.y > 8 + 1)
+            if (keyPressed == ConsoleKey.W && player1.y > gameModel.Y0 + 1)
             {
                 if (!CheckCollision(player1.x, player1.y - 1, obstacleGrid))
                 {
-                    gameView.deletePlayerFromOldPositionInField(player1, sideLength);
+                    gameView.deletePlayerFromOldPositionInField(player1, sideLength, gameModel.Y0);
                     player1.Weight -= 1;
                     player1.y--;
                 }
             }
-            if (keyPressed == ConsoleKey.D && player1.x < 10 + 2 * sideLength - 1)
+            if (keyPressed == ConsoleKey.D && player1.x < gameModel.X0 + 2 * sideLength - 1)
             {
                 if (!CheckCollision(player1.x + 1, player1.y, obstacleGrid))
                 {
-                    gameView.deletePlayerFromOldPositionInField(player1, sideLength);
+                    gameView.deletePlayerFromOldPositionInField(player1, sideLength, gameModel.Y0);
                     player1.Weight -= 1;
                     player1.x++;
                 }
             }
-            if (keyPressed == ConsoleKey.S && player1.y < 8 + sideLength)
+            if (keyPressed == ConsoleKey.S && player1.y < gameModel.Y0 + sideLength)
             {
                 if (!CheckCollision(player1.x, player1.y + 1, obstacleGrid))
                 {
-                    gameView.deletePlayerFromOldPositionInField(player1, sideLength);
+                    gameView.deletePlayerFromOldPositionInField(player1, sideLength, gameModel.Y0);
                     player1.Weight -= 1;
                     player1.y++;
                 }
@@ -254,38 +259,38 @@ namespace SumoMVC.Controllers
             }
 
             //obsluga klawiszy 2 zawodnika
-            if (keyPressed == ConsoleKey.LeftArrow && player2.x > 10 + 1)
+            if (keyPressed == ConsoleKey.LeftArrow && player2.x > gameModel.X0 + 1)
             {
                 if (!CheckCollision(player2.x - 1, player2.y, obstacleGrid))
                 {
-                    gameView.deletePlayerFromOldPositionInField(player2, sideLength);
+                        gameView.deletePlayerFromOldPositionInField(player2, sideLength, gameModel.Y0);
                     player2.Weight -= 1;
                     player2.x--;
                 }
             }
-            if (keyPressed == ConsoleKey.UpArrow && player2.y > 8 + 1)
+            if (keyPressed == ConsoleKey.UpArrow && player2.y > gameModel.Y0 + 1)
             {
                 if (!CheckCollision(player2.x, player2.y - 1, obstacleGrid))
                 {
-                    gameView.deletePlayerFromOldPositionInField(player2, sideLength);
+                        gameView.deletePlayerFromOldPositionInField(player2, sideLength, gameModel.Y0);
                     player2.Weight -= 1;
                     player2.y--;
                 }
             }
-            if (keyPressed == ConsoleKey.RightArrow && player2.x < 10 + 2 * sideLength - 1)
+            if (keyPressed == ConsoleKey.RightArrow && player2.x < gameModel.X0 + 2 * sideLength - 1)
             {
                 if (!CheckCollision(player2.x + 1, player2.y, obstacleGrid))
                 {
-                    gameView.deletePlayerFromOldPositionInField(player2, sideLength);
+                        gameView.deletePlayerFromOldPositionInField(player2, sideLength, gameModel.Y0);
                     player2.Weight -= 1;
                     player2.x++;
                 }
             }
-            if (keyPressed == ConsoleKey.DownArrow && player2.y < 8 + sideLength)
+            if (keyPressed == ConsoleKey.DownArrow && player2.y < gameModel.Y0 + sideLength)
             {
                 if (!CheckCollision(player2.x, player2.y + 1, obstacleGrid))
                 {
-                    gameView.deletePlayerFromOldPositionInField(player2, sideLength);
+                        gameView.deletePlayerFromOldPositionInField(player2, sideLength, gameModel.Y0);
                     player2.Weight -= 1;
                     player2.y++;
                 }
@@ -295,7 +300,7 @@ namespace SumoMVC.Controllers
 
 
         //JEDZONKO
-        public Food FoodGenerator(IGameModel gameModel, int sideLength)
+        public Food FoodGenerator(int sideLength)
         {
             Food food = new Food();
             bool foodGenerated = false;
@@ -305,8 +310,8 @@ namespace SumoMVC.Controllers
             while (!foodGenerated)
             {
                 food.kg = random.Next(1, 40);
-                food.x = random.Next(11, 10 + 2 * sideLength - 1);
-                food.y = random.Next(9, 8 + sideLength);
+                food.x = random.Next((gameModel.X0+1), gameModel.X0 + 2 * sideLength - 1);
+                food.y = random.Next((gameModel.Y0+1), gameModel.Y0 + sideLength);
                 if (gameModel.Mode == 0)
                 {
                     food.Eaten = false;
@@ -315,7 +320,7 @@ namespace SumoMVC.Controllers
                 }
                 else//warunek ze jedzenie nie bedzie sie genrowac na przeszkodach
                 {
-                    if ((!gameModel.obstacleGrid[food.x - 11, food.y - 9]) &&
+                    if ((!CheckCollision(food.x,food.y,gameModel.ObstacleGrid)) &&
                     (food.x != gameModel.Player1.x || food.y != gameModel.Player1.y) &&
                     (food.x != gameModel.Player2.x || food.y != gameModel.Player2.y)
                     )
@@ -332,7 +337,7 @@ namespace SumoMVC.Controllers
 
         //PRZESZKODY
         //wywoływanie odpowiedniej metody tworzenia przeszkód
-        public bool[,] GenerateObstacles(IGameModel gameModel, int sideLength)
+        public bool[,] GenerateObstacles(int sideLength)
         {
             if (gameModel.Mode == 0)
             {
@@ -341,19 +346,19 @@ namespace SumoMVC.Controllers
             }
             else if (gameModel.Mode == 1)
             {
-                return CreateObstacles(sideLength);
+                return CreateObstacles(gameModel.SideLength);
 
             }
             else if (gameModel.Mode == 2)
             {
-                return CreateRandomObstacles(gameModel.Player1, gameModel.Player2, sideLength);
+                return CreateRandomObstacles(gameModel.Player1, gameModel.Player2, gameModel.SideLength);
             }
             return null;
 
         }
 
         //tworzenie przeszkód
-        private bool[,] CreateRandomObstacles(Player player1, Player player2, int sideLength)
+        public bool[,] CreateRandomObstacles(Player player1, Player player2, int sideLength)
         {
             bool[,] obstacleGrid = new bool[2 * sideLength, sideLength]; // inicjalizacja tablicy przeszkód
 
@@ -361,15 +366,15 @@ namespace SumoMVC.Controllers
 
             for (int i = 0; i < 8; i++)
             {
-                int obstacleX = random.Next(11, 10 + 2 * sideLength - 1);
-                int obstacleY = random.Next(9, 8 + sideLength);
+                int obstacleX = random.Next(gameModel.X0+1, gameModel.X0 + 2 * sideLength - 1);
+                int obstacleY = random.Next(gameModel.Y0+1, gameModel.Y0 + sideLength);
 
                 // sprawdzanie czy nowa pozycja przeszkody koliduje z innymi przeszkodami lub graczami
-                if ((!obstacleGrid[obstacleX - 11, obstacleY - 9]) &&
+                if (!CheckCollision(obstacleX, obstacleY, obstacleGrid) &&
                     (obstacleX != player1.x || obstacleY != player1.y) &&
                     (obstacleX != player2.x || obstacleY != player2.y))
                 {
-                    obstacleGrid[obstacleX - 11, obstacleY - 9] = true; // ustawienie komórki jako zajętą
+                    obstacleGrid[obstacleX - (gameModel.X0+1), obstacleY - (gameModel.Y0+1)] = true; // ustawienie komórki jako zajętą
                     gameView.DisplayObstacle(obstacleX, obstacleY);
 
                 }
@@ -393,7 +398,7 @@ namespace SumoMVC.Controllers
                 int obstacleX = obstacleStartX + i;
                 int obstacleY = obstacleStartY;
 
-                obstacleGrid[obstacleX - 11, obstacleY - 9] = true; // Ustawienie komórki jako zajętą
+                obstacleGrid[obstacleX - (gameModel.X0+1), obstacleY - (gameModel.Y0+1)] = true; // Ustawienie komórki jako zajętą
 
                 gameView.DisplayObstacle(obstacleX, obstacleY);
             }
@@ -405,7 +410,7 @@ namespace SumoMVC.Controllers
                 int obstacleX = obstacleStartX + i;
                 int obstacleY = obstacleStartY;
 
-                obstacleGrid[obstacleX - 11, obstacleY - 9] = true; // Ustawienie komórki jako zajętą
+                obstacleGrid[obstacleX - (gameModel.X0+1), obstacleY - (gameModel.Y0+1)] = true; // Ustawienie komórki jako zajętą
 
                 gameView.DisplayObstacle(obstacleX, obstacleY);
 
@@ -418,7 +423,7 @@ namespace SumoMVC.Controllers
                 int obstacleX = obstacleStartX + i;
                 int obstacleY = obstacleStartY;
 
-                obstacleGrid[obstacleX - 11, obstacleY - 9] = true; // Ustawienie komórki jako zajętą
+                obstacleGrid[obstacleX - (gameModel.X0+1), obstacleY - (gameModel.Y0+1)] = true; // Ustawienie komórki jako zajętą
 
                 gameView.DisplayObstacle(obstacleX, obstacleY);
 
@@ -431,7 +436,7 @@ namespace SumoMVC.Controllers
                 int obstacleY = obstacleStartY + i;
                 int obstacleX = obstacleStartX;
 
-                obstacleGrid[obstacleX - 11, obstacleY - 9] = true; // ustawienie komórki jako zajętą
+                obstacleGrid[obstacleX - (gameModel.X0+1), obstacleY - (gameModel.Y0+1)] = true; // ustawienie komórki jako zajętą
 
                 gameView.DisplayObstacle(obstacleX, obstacleY);
 
