@@ -12,19 +12,22 @@ namespace SumoMVC.Views
     {
         public void ShowMenu(IMenuModel menu)
         {
+            Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.WriteLine(menu.Prompt);
+            Console.ResetColor();
             for (int i = 0; i < menu.Options.Length; i++)
             {
-                string prefix;
+                Console.Write("\t\t\t\t\t\t");
                 if (i == menu.SelectedIndex)
-                {
-                    prefix = "*";
+                { 
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"<< {menu.Options[i]} >>");
+                    Console.ResetColor();
                 }
                 else
                 {
-                    prefix = " ";
+                    Console.WriteLine($"<< {menu.Options[i]} >>");
                 }
-                Console.WriteLine($"{prefix} << {menu.Options[i]} >>");
             }
         }
 
@@ -39,12 +42,22 @@ namespace SumoMVC.Views
                                                                                                                      
                                                                                                                      ";
             Console.Clear();
+            Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.WriteLine(prompt);
+            Console.ResetColor();
+            Console.SetCursorPosition(20, 10);
             Console.WriteLine("Eat as much food as you can to gain weight and strength and try to crush your opponent.");
+            Console.SetCursorPosition(20, 11);
             Console.WriteLine("But be careful, the more you move, the more weight you will lose.");
+            Console.SetCursorPosition(20, 12);
             Console.WriteLine("Collect food items of different weights to help you defeat your opponent.");
-            Console.WriteLine("Authors: Dorota Maliszewska and Justyna Sadowska");
-            Console.WriteLine("\nPress any key to return to the menu.");
+            Console.SetCursorPosition(50, 22);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Authors:");
+            Console.ResetColor();
+            Console.SetCursorPosition(35, 23);
+            Console.Write("Dorota Maliszewska and Justyna Sadowska");
+            Console.WriteLine("\n\n\nPress any key to return to the menu.");
             Console.ReadKey(true);
 
         }
@@ -52,29 +65,73 @@ namespace SumoMVC.Views
         public void Exit()
         {
             Console.Clear();
-            Console.WriteLine("Are you sure you want to exit the game? (Y/N)");
+            string[] options = { "yes", "no" };
+            int selectedIndex = 0;
+            ConsoleKey keyPressed;
+            do
+            {
+                Console.Clear(); //czyscimy konsole
+                Console.SetCursorPosition(35, 7);
+                Console.WriteLine("Are you sure you want to exit the game?");
+                for (int i = 0; i < options.Length; i++)
+                {
+                    Console.Write("\t\t\t\t\t\t");
+                    if (i == selectedIndex)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine($" << {options[i]} >>");
+                        Console.ResetColor();
+                    }
+                    else
+                    {
+                        Console.WriteLine($" << {options[i]} >>");
+                    }
 
-            ConsoleKeyInfo key = Console.ReadKey(true);
-            if (key.Key == ConsoleKey.Y)//jesli tak
+                }
+                ConsoleKeyInfo keyInfo = Console.ReadKey(true); //wczytujemy informacje o wcisnietym przycisku
+                keyPressed = keyInfo.Key; //przypisujemy wartosc wcisnietego przycisku
+
+                if (keyPressed == ConsoleKey.DownArrow) //jesli wcisnieta jest strzalka w dol
+                {
+                    selectedIndex++;
+                    if (selectedIndex == options.Length)
+                    {
+                        selectedIndex = 0;
+                    }
+                }
+                else if (keyPressed == ConsoleKey.UpArrow) //jesli wcisnieta jest strzalka w gore
+                {
+                    selectedIndex--;
+                    if (selectedIndex == -1)
+                    {
+                        selectedIndex = options.Length - 1;
+                    }
+
+                }
+
+
+            } while (keyPressed != ConsoleKey.Enter); //petla sie bedzie wykonywac dopoki nie wcisniemy enter
+            if(selectedIndex == 0) 
             {
                 Console.WriteLine("Exiting the application...");
                 System.Threading.Thread.Sleep(1000);
                 Environment.Exit(0);
+
             }
-            else//jesli nie
+            else
             {
                 return;
             }
 
         }
-        public void LoadGameResults(string resultFilePath)
+        public void LoadGameResults(string resultFilePath, int x, int y)
         {
             List<GameResult> gameResults = new List<GameResult>();
             if (File.Exists(resultFilePath))
             {
                 // Odczytujemy wszystkie linie z pliku rankingowego
                 string[] lines = File.ReadAllLines(resultFilePath);
-
+                
                 foreach (string line in lines)
                 {
                     // Dzielimy linię na nazwę gracza i wynik
@@ -101,7 +158,16 @@ namespace SumoMVC.Views
                 int position = 1;
                 foreach (var result in gameResults)
                 {
-                    Console.WriteLine($"{position}. {result.PlayerName}| {result.Score} points |{result.Time.TotalSeconds} seconds");
+                    Console.SetCursorPosition(x, y+position);
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"{ position}.");
+                    Console.ResetColor();
+                    Console.SetCursorPosition(x+3, y + position);
+                    Console.WriteLine(result.PlayerName);
+                    Console.SetCursorPosition(x + 15, y + position);
+                    Console.WriteLine($"{result.Score} points");
+                    Console.SetCursorPosition(x + 30, y + position);
+                    Console.WriteLine($"{result.Time.TotalSeconds} sec");
                     position++;
                 }
             }
@@ -123,15 +189,28 @@ namespace SumoMVC.Views
                                   __/ |
                                  |___/ ";
             Console.Clear();
+            Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.WriteLine(prompt);
+            Console.ResetColor();
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.SetCursorPosition(0, 9);
+            Console.WriteLine("Standard");
+            Console.ResetColor();
             string resultFilePath = "ranking.txt";
-            LoadGameResults(resultFilePath);
-            Console.WriteLine("-----------------------------------");
+            LoadGameResults(resultFilePath, 0, 9);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.SetCursorPosition(40, 9);
+            Console.WriteLine("Static");
+            Console.ResetColor();
             resultFilePath = "rankingStatic.txt";
-            LoadGameResults(resultFilePath);
-            Console.WriteLine("-----------------------------------");
+            LoadGameResults(resultFilePath, 40, 9);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.SetCursorPosition(80, 9);
+            Console.WriteLine("Random");
+            Console.ResetColor();
             resultFilePath = "rankingRandom.txt";
-            LoadGameResults(resultFilePath);
+            LoadGameResults(resultFilePath, 80, 9);
+            Console.SetCursorPosition(0, 28);
             Console.WriteLine("\nPress any key to return to the main menu.");
             Console.ReadKey(true);
         }

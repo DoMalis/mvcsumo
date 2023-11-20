@@ -13,7 +13,7 @@ namespace SumoMVC.Models
         public bool[,]? obstacleGrid {  get; set; }
             public Player Player1 { get; set; }
         public Player Player2 { get; set; }
-        public int Mode { get ; set; } // 
+        public int Mode { get ; set; }  
         public GameResult GameResult { get; set; }  
     }
 }

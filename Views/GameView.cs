@@ -18,20 +18,20 @@ namespace SumoMVC.Views
         public Player CreatePlayer(int playerId)
         {
             Console.Clear();
-            Console.WriteLine("Wprowadź nazwę " + playerId + " gracza: ");
+            Console.SetCursorPosition(40, 7);
+            Console.WriteLine("Enter a name for player number " + playerId + ": ");
             string nazwa;
             do
             {
+                Console.SetCursorPosition(52, 8);
+                Console.ForegroundColor = ConsoleColor.Red;
                 nazwa = Console.ReadLine();
-                if (string.IsNullOrWhiteSpace(nazwa))
-                {
-                    Console.WriteLine("Nazwa użytkownika nie może być pusta. Wprowadź ponownie: ");
-                }
-
+                Console.ResetColor();
+                
             } while (string.IsNullOrWhiteSpace(nazwa));
             Player player = new Player(nazwa, playerId);
-            if (playerId == 1) player.shape = '+';
-            else player.shape = 'o';
+            if (playerId == 1) player.shape = '☻';
+            else player.shape = '☺';
             return player;
         }
 
@@ -41,7 +41,7 @@ namespace SumoMVC.Views
         {
             Console.Clear();
             string[] options = { "standard", "static", "random" };
-            string prompt = "Choose game mode ";
+            string prompt = "\n\n\n\n\n\n\n\t\t\t\t\t\tChoose game mode ";
             Console.WriteLine(prompt);
             int selectedIndex = 0;
             ConsoleKey keyPressed;
@@ -51,16 +51,18 @@ namespace SumoMVC.Views
                 Console.WriteLine(prompt);
                 for (int i = 0; i < options.Length; i++)
                 {
-                    string prefix;
+                    Console.Write("\t\t\t\t\t\t");
                     if (i == selectedIndex)
                     {
-                        prefix = "*";
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine($" << {options[i]} >>");
+                        Console.ResetColor();
                     }
                     else
                     {
-                        prefix = " ";
+                        Console.WriteLine($" << {options[i]} >>");
                     }
-                    Console.WriteLine($"{prefix} << {options[i]} >>");
+                    
                 }
                 ConsoleKeyInfo keyInfo = Console.ReadKey(true); //wczytujemy informacje o wcisnietym przycisku
                 keyPressed = keyInfo.Key; //przypisujemy wartosc wcisnietego przycisku
@@ -169,7 +171,9 @@ namespace SumoMVC.Views
                 obstacleGrid[obstacleX - 11, obstacleY - 9] = true; // Ustawienie komórki jako zajętą
 
                 Console.SetCursorPosition(obstacleX, obstacleY);
-                Console.Write('X');
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write('■');
+                Console.ResetColor();
             }
 
             obstacleStartX = 17;
@@ -182,7 +186,9 @@ namespace SumoMVC.Views
                 obstacleGrid[obstacleX - 11, obstacleY - 9] = true; // Ustawienie komórki jako zajętą
 
                 Console.SetCursorPosition(obstacleX, obstacleY);
-                Console.Write('X');
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write('■');
+                Console.ResetColor();
             }
 
             obstacleStartX = 20;
@@ -195,7 +201,9 @@ namespace SumoMVC.Views
                 obstacleGrid[obstacleX - 11, obstacleY - 9] = true; // Ustawienie komórki jako zajętą
 
                 Console.SetCursorPosition(obstacleX, obstacleY);
-                Console.Write('X');
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write('■');
+                Console.ResetColor();
             }
 
             obstacleStartX = 13;
@@ -208,7 +216,9 @@ namespace SumoMVC.Views
                 obstacleGrid[obstacleX - 11, obstacleY - 9] = true; // ustawienie komórki jako zajętą
 
                 Console.SetCursorPosition(obstacleX, obstacleY);
-                Console.Write('X');
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write('█');
+                Console.ResetColor();
             }
             return obstacleGrid;
         }
@@ -233,7 +243,9 @@ namespace SumoMVC.Views
                     obstacleGrid[obstacleX - 11, obstacleY - 9] = true; // ustawienie komórki jako zajętą
 
                     Console.SetCursorPosition(obstacleX, obstacleY);
-                    Console.Write('X');
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write('■');
+                    Console.ResetColor();
                 }
                 else
                 {
@@ -254,6 +266,7 @@ namespace SumoMVC.Views
             Console.SetCursorPosition(0, 2);
             Console.Write(new string(' ', Console.WindowWidth));
             //wyswieltmay dane pierwszego gracza, ustawiamy miejsce od ktorego zaczynamy wypisywac dane
+            
             Console.SetCursorPosition(0, 0);
             Console.WriteLine("Player 1");
 
@@ -267,17 +280,35 @@ namespace SumoMVC.Views
             Console.WriteLine("Shape: " + player1.shape);
 
             //wyswieltmay dane drugiego gracza, ustawiamy miejsce od ktorego zaczynamy wypisywac dane
-            Console.SetCursorPosition(50, 0);
+            Console.SetCursorPosition(60, 0);
             Console.WriteLine("Player 2");
 
-            Console.SetCursorPosition(50, 1);
+            Console.SetCursorPosition(60, 1);
             Console.WriteLine("Nick: " + player2.Nick);
 
-            Console.SetCursorPosition(50, 2);
+            Console.SetCursorPosition(60, 2);
             Console.WriteLine("Weight: " + player2.Weight);
 
-            Console.SetCursorPosition(50, 3);
+            Console.SetCursorPosition(60, 3);
             Console.WriteLine("Shape: " + player2.shape);
+
+            Console.SetCursorPosition(30, 0);
+            if (player1.Weight > player2.Weight)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Currently winning:");
+                Console.SetCursorPosition(30, 1);
+                Console.WriteLine(player1.Nick);
+                Console.ResetColor();
+            }
+            else if(player2.Weight > player1.Weight) 
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Currently winning:");
+                Console.SetCursorPosition(30, 1);
+                Console.WriteLine(player2.Nick);
+                Console.ResetColor();
+            }
 
 
         }
@@ -445,8 +476,10 @@ namespace SumoMVC.Views
             Console.Write(new string(' ', Console.WindowWidth));
 
             // Display the game time
-            Console.SetCursorPosition(0, Console.WindowHeight - 5);
+            Console.SetCursorPosition(30, Console.WindowHeight - 5);
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.Write("Game Time: " + gameDuration.TotalSeconds.ToString("F0") + " sec");
+            Console.ResetColor();
         }
 
         //LOGIKA DZIAŁANIA GRY
@@ -575,54 +608,100 @@ namespace SumoMVC.Views
         public void EndGame(GameResult gameResult, int mode)
         {
             Console.Clear();
-
-            Console.WriteLine("The winner is " + gameResult.PlayerName + "!");
-            Console.WriteLine("Game duration: " + gameResult.Time.TotalSeconds.ToString("F0") + " seconds");
-            Console.WriteLine(gameResult.PlayerName + ", do you want to save your score?(Y/N)");
-            ConsoleKeyInfo key;
+            string[] options = { "yes", "no" };
+            int selectedIndex = 0;
+            ConsoleKey keyPressed;
             do
             {
-                key = Console.ReadKey(true);
-                if (key.Key == ConsoleKey.Y)//jesli tak
+                Console.Clear(); //czyscimy konsole
+                Console.SetCursorPosition(43, 7);
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("The winner is " + gameResult.PlayerName + "!");
+                Console.ResetColor();
+                Console.SetCursorPosition(37, 9);
+                Console.WriteLine("Game duration: " + gameResult.Time.TotalSeconds.ToString("F0") + " seconds");
+                Console.SetCursorPosition(35, 9);
+                Console.WriteLine(gameResult.PlayerName + ", do you want to save your score?");
+                
+                for (int i = 0; i < options.Length; i++)
                 {
-                    //zapisanie do rankingu
-                    string resultFilePath;
-                    // SaveGameResult(gameMode, player1.Nick, player1.Weight, gameTimer.Elapsed.TotalSeconds.ToString("F0"));
-                    // Ranking(gameMode);
-
-                    if (mode==0)
+                    Console.Write("\t\t\t\t\t\t");
+                    if (i == selectedIndex)
                     {
-                        resultFilePath = "ranking.txt";
-
-                    }
-                    else if (mode ==1)
-                    {
-                        resultFilePath = "rankingStatic.txt";
-
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine($" << {options[i]} >>");
+                        Console.ResetColor();
                     }
                     else
                     {
-                        resultFilePath = "rankingRandom.txt";
-
+                        Console.WriteLine($" << {options[i]} >>");
                     }
-                    using (StreamWriter writer = new StreamWriter(resultFilePath, true))
-                    {
-                        
-                        Console.WriteLine(gameResult.Time.TotalSeconds.ToString("F0"));
-                        writer.WriteLine(gameResult.PlayerName + "," + gameResult.Score + "," + gameResult.Time.ToString(@"hh\:mm\:ss"));
-                    }
-                    Console.WriteLine("Your score is saved");
-                    Console.WriteLine("\nPress any key to return to the menu.");
 
-                    Console.ReadKey(true);
-                    return;
                 }
-                else if (key.Key == ConsoleKey.N)//jesli nie
+                ConsoleKeyInfo keyInfo = Console.ReadKey(true); //wczytujemy informacje o wcisnietym przycisku
+                keyPressed = keyInfo.Key; //przypisujemy wartosc wcisnietego przycisku
+
+                if (keyPressed == ConsoleKey.DownArrow) //jesli wcisnieta jest strzalka w dol
                 {
-                    return;
+                    selectedIndex++;
+                    if (selectedIndex == options.Length)
+                    {
+                        selectedIndex = 0;
+                    }
                 }
-            } while (key.Key != ConsoleKey.Y || key.Key != ConsoleKey.N);
+                else if (keyPressed == ConsoleKey.UpArrow) //jesli wcisnieta jest strzalka w gore
+                {
+                    selectedIndex--;
+                    if (selectedIndex == -1)
+                    {
+                        selectedIndex = options.Length - 1;
+                    }
 
+                }
+
+
+            } while (keyPressed != ConsoleKey.Enter); //petla sie bedzie wykonywac dopoki nie wcisniemy enter
+            if (selectedIndex == 0) 
+            {
+                //zapisanie do rankingu
+                string resultFilePath;
+                // SaveGameResult(gameMode, player1.Nick, player1.Weight, gameTimer.Elapsed.TotalSeconds.ToString("F0"));
+                // Ranking(gameMode);
+
+                if (mode == 0)
+                {
+                    resultFilePath = "ranking.txt";
+
+                }
+                else if (mode == 1)
+                {
+                    resultFilePath = "rankingStatic.txt";
+
+                }
+                else
+                {
+                    resultFilePath = "rankingRandom.txt";
+
+                }
+                using (StreamWriter writer = new StreamWriter(resultFilePath, true))
+                {
+
+                    Console.WriteLine(gameResult.Time.TotalSeconds.ToString("F0"));
+                    writer.WriteLine(gameResult.PlayerName + "," + gameResult.Score + "," + gameResult.Time.ToString(@"hh\:mm\:ss"));
+                }
+                Console.Clear();
+                Console.WriteLine("Your score is saved");
+                
+                Console.WriteLine("\nPress any key to return to the menu.");
+
+                Console.ReadKey(true);
+                return;
+            }
+            else
+            {
+                return;
+            }
+            
         }
 
 
