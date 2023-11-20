@@ -15,7 +15,6 @@ namespace SumoMVC.Models
         Player Player2 { get; set; }
         int Mode {  get; set; }
         public GameResult GameResult { get; set; }
-
-
+        int sideLength { get;set; }
     }
 }

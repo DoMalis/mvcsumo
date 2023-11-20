@@ -1,6 +1,7 @@
 ﻿using SumoMVC.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,21 +10,23 @@ namespace SumoMVC.Views
 {
     public interface IGameView
     {
-        //
+        //???
         Player CreatePlayer(int id);
-
-        //
+        void EndGame(GameResult gameResult, int mode);
         int ChooseGameMode();
 
-        //
+  
+        //powinno byc ok
         void DisplayPlayersInformation(Player player, Player player2);
-        bool[,] CreateBattleField(IGameModel gameModel);
-        GameResult GameLogic(IGameModel gameModel);
+        void DisplayObstacle(int obstacleX, int obstacleY);
+        void DisplayFood(Food food);
+        void DisplayGameTime(Stopwatch gameTimer);
+        void setPlayerInNewPositionInField(Player player);
+        void deletePlayerFromOldPositionInField(Player player, int sideLength);
+        public void DisplayBattleFieldBorders();
+        
 
-        //
-        void EndGame(GameResult gameResult, int mode);
 
 
-        //void DisplayGameTime(TimeSpan gameDuration);
     }
 }
