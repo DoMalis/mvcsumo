@@ -17,12 +17,12 @@ namespace SumoMVC.Views
         public Player CreatePlayer(int playerId)
         {
             Console.Clear();
-            Console.SetCursorPosition(40, 7);
+            Console.SetCursorPosition(40, 5);
             Console.WriteLine("Enter a name for player number " + playerId + ": ");
             string nazwa;
             do
             {
-                Console.SetCursorPosition(52, 8);
+                Console.SetCursorPosition(52, 7);
                 Console.ForegroundColor = ConsoleColor.Red;
                 nazwa = Console.ReadLine();
                 Console.ResetColor();
@@ -39,8 +39,8 @@ namespace SumoMVC.Views
         public int ChooseGameMode()
         {
             Console.Clear();
-            string[] options = { "standard", "static", "random" };
-            string prompt = "\n\n\n\n\n\n\n\t\t\t\t\t\tChoose game mode ";
+            string[] options = { "standard board", "board with static obstacles", "board with random obstacles" };
+            string prompt = "\n\n\n\n\n\t\t\t\t\t\tCHOOSE YOUR GAME MODE\n";
             Console.WriteLine(prompt);
             int selectedIndex = 0;
             ConsoleKey keyPressed;
@@ -50,7 +50,7 @@ namespace SumoMVC.Views
                 Console.WriteLine(prompt);
                 for (int i = 0; i < options.Length; i++)
                 {
-                    Console.Write("\t\t\t\t\t\t");
+                    Console.Write("\t\t\t\t\t");
                     if (i == selectedIndex)
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
@@ -124,14 +124,7 @@ namespace SumoMVC.Views
 
         }
 
-        
-
-
-//FOOD GENERATOR
-        
-        //DISPLAY OBSTALCE
-
-       
+               
         //WIDOK KOŃCA GRY
         public void EndGame(GameResult gameResult, int mode)
         {
@@ -142,7 +135,7 @@ namespace SumoMVC.Views
             do
             {
                 Console.Clear(); //czyscimy konsole
-                Console.SetCursorPosition(43, 7);
+                Console.SetCursorPosition(45, 7);
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("The winner is " + gameResult.PlayerName + "!");
                 Console.ResetColor();
@@ -218,9 +211,12 @@ namespace SumoMVC.Views
                     writer.WriteLine(gameResult.PlayerName + "," + gameResult.Score + "," + gameResult.Time.ToString(@"hh\:mm\:ss"));
                 }
                 Console.Clear();
-                Console.WriteLine("Your score is saved");
-                
-                Console.WriteLine("\nPress any key to return to the menu.");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.SetCursorPosition(50,9);
+                Console.WriteLine("Your score is saved!");
+                Console.ResetColor();
+                Console.SetCursorPosition(0, 28);
+                Console.WriteLine("Press any key to return to the menu.");
 
                 Console.ReadKey(true);
                 return;
@@ -239,53 +235,42 @@ namespace SumoMVC.Views
         //INFORMACJE O GRACZACH
         public void DisplayPlayersInformation(Player player1, Player player2)
         {
-            Console.SetCursorPosition(0, 2);
+            Console.SetCursorPosition(0, 9);
             Console.Write(new string(' ', Console.WindowWidth));
             //wyswieltmay dane pierwszego gracza, ustawiamy miejsce od ktorego zaczynamy wypisywac dane
+            if(player1.Weight > player2.Weight)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+            }
+            Console.SetCursorPosition(10,7);
+            Console.WriteLine("PLAYER 1");
 
-            Console.SetCursorPosition(0, 0);
-            Console.WriteLine("Player 1");
+            Console.SetCursorPosition(10, 8);
+            Console.WriteLine("NICK: " + player1.Nick);
 
-            Console.SetCursorPosition(0, 1);
-            Console.WriteLine("Nick: " + player1.Nick);
+            Console.SetCursorPosition(10, 9);
+            Console.WriteLine("WEIGHT: " + player1.Weight);
 
-            Console.SetCursorPosition(0, 2);
-            Console.WriteLine("Weight: " + player1.Weight);
-
-            Console.SetCursorPosition(0, 3);
-            Console.WriteLine("Shape: " + player1.shape);
-
+            Console.SetCursorPosition(10, 10);
+            Console.WriteLine("SHAPE: " + player1.shape);
+            Console.ResetColor();
+            if (player2.Weight > player1.Weight)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+            }           
             //wyswieltmay dane drugiego gracza, ustawiamy miejsce od ktorego zaczynamy wypisywac dane
-            Console.SetCursorPosition(60, 0);
-            Console.WriteLine("Player 2");
+            Console.SetCursorPosition(85, 7);
+            Console.WriteLine("PLAYER 2");
 
-            Console.SetCursorPosition(60, 1);
-            Console.WriteLine("Nick: " + player2.Nick);
+            Console.SetCursorPosition(85, 8);
+            Console.WriteLine("NICK: " + player2.Nick);
 
-            Console.SetCursorPosition(60, 2);
-            Console.WriteLine("Weight: " + player2.Weight);
+            Console.SetCursorPosition(85, 9);
+            Console.WriteLine("WEIGHT: " + player2.Weight);
 
-            Console.SetCursorPosition(60, 3);
-            Console.WriteLine("Shape: " + player2.shape);
-
-            Console.SetCursorPosition(30, 0);
-            if (player1.Weight > player2.Weight)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Currently winning:");
-                Console.SetCursorPosition(30, 1);
-                Console.WriteLine(player1.Nick);
-                Console.ResetColor();
-            }
-            else if (player2.Weight > player1.Weight)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Currently winning:");
-                Console.SetCursorPosition(30, 1);
-                Console.WriteLine(player2.Nick);
-                Console.ResetColor();
-            }
-
+            Console.SetCursorPosition(85, 10);
+            Console.WriteLine("SHAPE: " + player2.shape);
+            Console.ResetColor();
 
         }
 
@@ -310,6 +295,13 @@ namespace SumoMVC.Views
             Console.Write('■');
             Console.ResetColor();
         }
+        public void DisplayObstacleVertical(int obstacleX, int obstacleY)
+        {
+            Console.SetCursorPosition(obstacleX, obstacleY);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write('■');
+            Console.ResetColor();
+        }
 
         //TIMER
         public void DisplayGameTime(Stopwatch gameTimer)
@@ -317,13 +309,13 @@ namespace SumoMVC.Views
             TimeSpan gameDuration = gameTimer.Elapsed;
 
             // Clear the timer area at the bottom of the screen
-            Console.SetCursorPosition(0, Console.WindowHeight - 5);
+            Console.SetCursorPosition(0, 25);
             Console.Write(new string(' ', Console.WindowWidth));
 
             // Display the game time
-            Console.SetCursorPosition(30, Console.WindowHeight - 5);
+            Console.SetCursorPosition(42, 25);
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write("Game Time: " + gameDuration.TotalSeconds.ToString("F0") + " sec");
+            Console.Write("GAME TIME: " + gameDuration.TotalSeconds.ToString("F0") + " sec");
             Console.ResetColor();
         }
 
@@ -334,8 +326,13 @@ namespace SumoMVC.Views
             Console.Write('F');
         }
 
-
-
+        public void DisplayStartGame()
+        {
+            Console.Clear();
+            Console.WriteLine("STAAAAAAAAAAART");
+            Thread.Sleep(1000);
+            Console.Clear();
+        }
     }
 }
 

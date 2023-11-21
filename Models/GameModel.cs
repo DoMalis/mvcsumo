@@ -22,8 +22,8 @@ namespace SumoMVC.Models
         public GameModel()
         {
             SideLength = 10;
-            X0 = 10;
-            Y0 = 8;
+            X0 = 40;
+            Y0 = 10;
         }
 
 

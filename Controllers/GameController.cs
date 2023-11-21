@@ -37,6 +37,7 @@ namespace SumoMVC.Controllers
         {
             CreatePlayers();
             ChooseGameMode();
+            gameView.DisplayStartGame();
             CreateGameView();
             GameLogic();
             End();
@@ -72,7 +73,6 @@ namespace SumoMVC.Controllers
             gameModel.Player1.y = gameModel.Y0+1;
             gameModel.Player2.x = gameModel.X0 + 2 * sideLength - 1;
             gameModel.Player2.y = gameModel.Y0 + sideLength;
-
             Random random = new Random();
             int randNumber;
             Food food = new Food();
@@ -155,6 +155,7 @@ namespace SumoMVC.Controllers
             // sprawdzanie czy nowa pozycja koliduje z przeszkodą
             return obstacleGrid[x - (gameModel.X0+1), y - (gameModel.Y0+1)];
         }
+
 
 
         //OBSŁUGA PORUSZANIA SIĘ
@@ -390,8 +391,8 @@ namespace SumoMVC.Controllers
             bool[,] obstacleGrid = new bool[2 * sideLength, sideLength]; // Inicjalizacja tablicy przeszkód
 
             // Stałe współrzędne przeszkód
-            int obstacleStartX = 15;
-            int obstacleStartY = 10;
+            int obstacleStartX = 43;
+            int obstacleStartY = 13;
 
             for (int i = 0; i < 5; i++)
             {
@@ -403,8 +404,21 @@ namespace SumoMVC.Controllers
                 gameView.DisplayObstacle(obstacleX, obstacleY);
             }
 
-            obstacleStartX = 17;
-            obstacleStartY = 17;
+            obstacleStartX = 49;
+            obstacleStartY = 19;
+            for (int i = 0; i < 4; i++)
+            {
+                int obstacleX = obstacleStartX + i;
+                int obstacleY = obstacleStartY;
+
+                obstacleGrid[obstacleX - (gameModel.X0+1), obstacleY - (gameModel.Y0+1)] = true; // Ustawienie komórki jako zajętą
+
+                gameView.DisplayObstacle(obstacleX, obstacleY);
+
+            }
+
+            obstacleStartX = 53;
+            obstacleStartY = 15;
             for (int i = 0; i < 5; i++)
             {
                 int obstacleX = obstacleStartX + i;
@@ -416,21 +430,8 @@ namespace SumoMVC.Controllers
 
             }
 
-            obstacleStartX = 20;
-            obstacleStartY = 13;
-            for (int i = 0; i < 5; i++)
-            {
-                int obstacleX = obstacleStartX + i;
-                int obstacleY = obstacleStartY;
-
-                obstacleGrid[obstacleX - (gameModel.X0+1), obstacleY - (gameModel.Y0+1)] = true; // Ustawienie komórki jako zajętą
-
-                gameView.DisplayObstacle(obstacleX, obstacleY);
-
-            }
-
-            obstacleStartX = 13;
-            obstacleStartY = 14;
+            obstacleStartX = 44;
+            obstacleStartY = 16;
             for (int i = 0; i < 3; i++)
             {
                 int obstacleY = obstacleStartY + i;
@@ -438,7 +439,7 @@ namespace SumoMVC.Controllers
 
                 obstacleGrid[obstacleX - (gameModel.X0+1), obstacleY - (gameModel.Y0+1)] = true; // ustawienie komórki jako zajętą
 
-                gameView.DisplayObstacle(obstacleX, obstacleY);
+                gameView.DisplayObstacleVertical(obstacleX, obstacleY);//zmienic klocek
 
             }
             return obstacleGrid;
