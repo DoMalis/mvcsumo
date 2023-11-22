@@ -299,7 +299,7 @@ namespace SumoMVC.Views
         {
             Console.SetCursorPosition(obstacleX, obstacleY);
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write('■');
+            Console.Write('█');
             Console.ResetColor();
         }
 
@@ -328,10 +328,76 @@ namespace SumoMVC.Views
 
         public void DisplayStartGame()
         {
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            string prompt = @"
+                                                    ____  
+                                                   |___ \ 
+                                                     __) |
+                                                    |__ < 
+                                                    ___) |
+                                                   |____/ ";
             Console.Clear();
-            Console.WriteLine("STAAAAAAAAAAART");
+            Console.SetCursorPosition(57,7);
+            Console.WriteLine(prompt);
             Thread.Sleep(1000);
             Console.Clear();
+            prompt = @"                       
+                                                     ___  
+                                                    |__ \ 
+                                                       ) |
+                                                      / / 
+                                                     / /_ 
+                                                    |____|
+";
+            Console.SetCursorPosition(57, 7);
+            Console.WriteLine(prompt);
+            Thread.Sleep(1000);
+            Console.Clear();
+            prompt = @"                       
+                                                      __ 
+                                                     /_ |
+                                                      | |
+                                                      | |
+                                                      | |
+                                                      |_|
+";
+            Console.SetCursorPosition(57, 7);
+            Console.WriteLine(prompt);
+            Thread.Sleep(1000);
+            Console.Clear();
+            Console.SetCursorPosition(57, 7);
+            prompt = @"
+                                     _____ _______       _____ _______ 
+                                    / ____|__   __|/\   |  __ \__   __|
+                                   | (___    | |  /  \  | |__) | | |   
+                                    \___ \   | | / /\ \ |  _  /  | |   
+                                    ____) |  | |/ ____ \| | \ \  | |   
+                                   |_____/   |_/_/    \_\_|  \_\ |_|   
+                                     
+                                     
+";
+            Console.WriteLine(prompt);
+            Thread.Sleep(1000);
+            Console.ResetColor();
+            Console.Clear();
+        }
+        public void DisplayEndGame()
+        {
+            string prompt = @"
+                                                  _  __       ____      
+                                                 | |/ /      / __ \     
+                                                 | ' /      | |  | |    
+                                                 |  <       | |  | |    
+                                                 | . \   _  | |__| |  _ 
+                                                 |_|\_\ (_)  \____/  (_)
+                                            
+";
+            Console.Clear();
+            Console.ForegroundColor= ConsoleColor.DarkRed;
+            Console.SetCursorPosition(50, 7);
+            Console.WriteLine(prompt);
+            Thread.Sleep(2500);
+            Console.ResetColor();
         }
     }
 }

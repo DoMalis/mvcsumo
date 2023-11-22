@@ -11,13 +11,9 @@ namespace SumoMVC.Views
 {
     public interface IGameView
     {
-        //???
         Player CreatePlayer(int id);
         void EndGame(GameResult gameResult, int mode);
         int ChooseGameMode();
-
-  
-        //powinno byc ok
         void DisplayPlayersInformation(Player player, Player player2);
         void DisplayObstacle(int obstacleX, int obstacleY);
         void DisplayObstacleVertical(int obstacleX, int obstacleY);
@@ -27,6 +23,8 @@ namespace SumoMVC.Views
         void deletePlayerFromOldPositionInField(Player player, int sideLength, int y);
         void DisplayBattleFieldBorders(int x0, int y0, int length);
         void DisplayStartGame();
+        void DisplayEndGame();
+
         
 
 

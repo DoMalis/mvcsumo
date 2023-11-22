@@ -33,13 +33,14 @@ namespace SumoMVC.Controllers
             gameModel.Mode = gameView.ChooseGameMode();
         }
 
-        public void StartGame() //to chyba nie xd
+        public void StartGame() 
         {
             CreatePlayers();
             ChooseGameMode();
             gameView.DisplayStartGame();
             CreateGameView();
             GameLogic();
+            gameView.DisplayEndGame();
             End();
         }
 

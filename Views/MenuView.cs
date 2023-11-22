@@ -34,11 +34,12 @@ namespace SumoMVC.Views
         public void About()
         {
 
-            string prompt = @" \ \        / / | |                          | |         / ____|                       |  _ \      | | | | | |    | |
-  \ \  /\  / /__| | ___ ___  _ __ ___   ___  | |_ ___   | (___  _   _ _ __ ___   ___   | |_) | __ _| |_| |_| | ___| |
-   \ \/  \/ / _ \ |/ __/ _ \| '_ ` _ \ / _ \ | __/ _ \   \___ \| | | | '_ ` _ \ / _ \  |  _ < / _` | __| __| |/ _ \ |
-    \  /\  /  __/ | (_| (_) | | | | | |  __/ | || (_) |  ____) | |_| | | | | | | (_) | | |_) | (_| | |_| |_| |  __/_|
-     \/  \/ \___|_|\___\___/|_| |_| |_|\___|  \__\___/  |_____/ \__,_|_| |_| |_|\___/  |____/ \__,_|\__|\__|_|\___(_)
+            string prompt = @"
+   \ \        / / | |                          | |         / ____|                       |  _ \      | | | | | |    | |
+    \ \  /\  / /__| | ___ ___  _ __ ___   ___  | |_ ___   | (___  _   _ _ __ ___   ___   | |_) | __ _| |_| |_| | ___| |
+     \ \/  \/ / _ \ |/ __/ _ \| '_ ` _ \ / _ \ | __/ _ \   \___ \| | | | '_ ` _ \ / _ \  |  _ < / _` | __| __| |/ _ \ |
+      \  /\  /  __/ | (_| (_) | | | | | |  __/ | || (_) |  ____) | |_| | | | | | | (_) | | |_) | (_| | |_| |_| |  __/_|
+       \/  \/ \___|_|\___\___/|_| |_| |_|\___|  \__\___/  |_____/ \__,_|_| |_| |_|\___/  |____/ \__,_|\__|\__|_|\___(_)
                                                                                                                      
                                                                                                                      ";
             Console.Clear();
@@ -183,36 +184,47 @@ namespace SumoMVC.Views
 
         public void Ranking()
         {
-            string prompt = @" _____             _    _             
- |  __ \           | |  (_)            
- | |__) |__ _ _ __ | | ___ _ __   __ _ 
- |  _  // _` | '_ \| |/ / | '_ \ / _` |
- | | \ \ (_| | | | |   <| | | | | (_| |
- |_|  \_\__,_|_| |_|_|\_\_|_| |_|\__, |
-                                  __/ |
-                                 |___/ ";
+            string prompt = @"
+                                    _____            _   _ _  _______ _   _  _____ 
+                                    |  __ \     /\   | \ | | |/ /_   _| \ | |/ ____|
+                                    | |__) |   /  \  |  \| | ' /  | | |  \| | |  __ 
+                                    |  _  /   / /\ \ | . ` |  <   | | | . ` | | |_ |
+                                    | | \ \  / ____ \| |\  | . \ _| |_| |\  | |__| |
+                                    |_|  \_\/_/    \_\_| \_|_|\_\_____|_| \_|\_____|
+                                                 
+                                                 
+";
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.WriteLine(prompt);
-            Console.ResetColor();
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.SetCursorPosition(0, 9);
+            Console.SetCursorPosition(13, 9);
             Console.WriteLine("STANDARD BOARD");
             Console.ResetColor();
             string resultFilePath = "ranking.txt";
-            LoadGameResults(resultFilePath, 0, 9);
+            for(int i=0; i<20; i++) 
+            {
+                Console.SetCursorPosition(38, 9+i);
+                Console.WriteLine("║");
+            }
+            LoadGameResults(resultFilePath, 0, 10);
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.SetCursorPosition(40, 9);
+            Console.SetCursorPosition(45, 9);
             Console.WriteLine("BOARD WITH STATIC OBSTACLES");
             Console.ResetColor();
             resultFilePath = "rankingStatic.txt";
-            LoadGameResults(resultFilePath, 40, 9);
+            for (int i = 0; i < 20; i++)
+            {
+                Console.SetCursorPosition(78, 9 + i);
+                Console.WriteLine("║");
+            }
+            LoadGameResults(resultFilePath, 40, 10);
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.SetCursorPosition(80, 9);
+            Console.SetCursorPosition(85, 9);
             Console.WriteLine("BOARD WITH RANDOM OBSTACLES");
             Console.ResetColor();
             resultFilePath = "rankingRandom.txt";
-            LoadGameResults(resultFilePath, 80, 9);
+            LoadGameResults(resultFilePath, 80, 10);
             Console.SetCursorPosition(0, 28);
             Console.WriteLine("\nPress any key to return to the main menu.");
             Console.ReadKey(true);
