@@ -228,10 +228,6 @@ namespace SumoMVC.Views
             
         }
 
-
-
-
-        //TO ZOSTAJE :
         //INFORMACJE O GRACZACH
         public void DisplayPlayersInformation(Player player1, Player player2)
         {
@@ -323,7 +319,7 @@ namespace SumoMVC.Views
         public void DisplayFood(Food food)
         {
             Console.SetCursorPosition(food.x, food.y);
-            Console.Write('F');
+            Console.Write('♥');
         }
 
         public void DisplayStartGame()
@@ -396,7 +392,7 @@ namespace SumoMVC.Views
             Console.ForegroundColor= ConsoleColor.DarkRed;
             Console.SetCursorPosition(50, 7);
             Console.WriteLine(prompt);
-            Thread.Sleep(2500);
+            Thread.Sleep(2000);
             Console.ResetColor();
         }
     }

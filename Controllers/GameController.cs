@@ -115,8 +115,6 @@ namespace SumoMVC.Controllers
 
                 }
 
-
-
                 //-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=--==-=-=-
                 //Co sie stanie jak glodomorki zjedzą ??
 
